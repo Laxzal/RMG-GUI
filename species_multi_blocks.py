@@ -16,7 +16,7 @@ class App(ttk.Frame):
         # create dropdown menu to select number of species blocks
         num_species_menu_label = tk.Label(self.master, text='Number of Species Blocks:')
         num_species_menu_label.grid(row=0, column=0)
-        num_species_menu = ttk.Combobox(self.master, width=2, textvariable=self.num_species_blocks)
+        num_species_menu = ttk.Combobox(self.master, width=2, textvariable=self.num_species_blocks, state='readonly')
         num_species_menu.grid(row=0, column=1)
         num_species_menu['values'] = ('1', '2', '3', '4', '5')
         num_species_menu.bind('<<ComboboxSelected>>', self.on_select)
@@ -24,17 +24,25 @@ class App(ttk.Frame):
         
         # create button to generate file
         generate_button = tk.Button(self.master, text='Generate', command=self.generate_file)
-        generate_button.grid(row=1, column=0, columnspan=2, pady=10)
+        generate_button.grid(row=10, column=6, columnspan=2, pady=10)
         
         # create list to store species blocks
         self.species_blocks = []
-        
+        self.species_labels_blocks = []
+        self.species_checks = []
+        self.on_select()
+
     def on_select(self, event=None):
         # clear existing species blocks
         for block in self.species_blocks:
             block.destroy()
         self.species_blocks = []
         self.species_checks = []
+        
+        for block in self.species_labels_blocks:
+            block.destroy()
+        self.species_labels_blocks = []
+        
         # create new species blocks
         num_blocks = int(self.num_species_blocks.get())
         for i in range(num_blocks):
@@ -56,6 +64,9 @@ class App(ttk.Frame):
             self.species_blocks.append(species_label_entry)
             self.species_blocks.append(species_smiles_entry)
             self.species_checks.append(reactive_var)
+            self.species_labels_blocks.append(species_label)
+            self.species_labels_blocks.append(species_smiles)
+            self.species_labels_blocks.append(reactive_check)
     
     def generate_file(self):
         # create list of species SMILES from user input
@@ -76,14 +87,16 @@ class App(ttk.Frame):
             
         # open file dialog to choose save location and name
         file_path = filedialog.asksaveasfilename(defaultextension='.py', filetypes=[('Python Files', '*.py')])
-        
+        if not file_path:
+            return
         # write file
         with open(file_path, 'w') as f:
             f.write(file_contents)
+            
         
         # show success message
         success_label = tk.Label(self.master, text='File saved successfully!', fg='green')
-        success_label.grid(row=len(self.species_blocks)+2, column=0, columnspan=2, pady=10)
+        success_label.grid(row=len(self.species_blocks+self.species_checks)+2, column=0, columnspan=2, pady=10)
 
 
 class Tab2(tk.Frame):
@@ -117,11 +130,16 @@ class Application(tk.Tk):
         self.notebook.pack(fill="both", expand=True)
 
         # Create tabs and add them to the notebook
-        self.tab1 = App(self.notebook)
+        # create species generator tab
+        self.species_tab = ttk.Frame(self.notebook)
+        self.notebook.add(self.species_tab, text='Species Generator')
+        self.app = App(self.species_tab)
+        
+        #self.app.pack(fill='both', expand=True)
+        
         self.tab2 = Tab2(self.notebook)
         self.tab3 = Tab3(self.notebook)
 
-        self.notebook.add(self.tab1, text="Tab 1")
         self.notebook.add(self.tab2, text="Tab 2")
         self.notebook.add(self.tab3, text="Tab 3")
 
