@@ -9,10 +9,7 @@ class App(ttk.Frame):
         #self.master.title('Species File Generator')
         self.label = tk.Label(self, text="Species Generator")
         self.label.pack(pady=5, padx=5)
-        # set default number of species blocks
-        self.num_species_blocks = tk.StringVar()
-        self.num_species_blocks.set('1')
-        
+
         # create dropdown menu to select number of species blocks
         num_species_menu_label = tk.Label(self.master, text='Number of Species Blocks:')
         num_species_menu_label.grid(row=0, column=0)
