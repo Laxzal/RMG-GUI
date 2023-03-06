@@ -2,10 +2,11 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 
-class App:
+class App(ttk.Frame):
     def __init__(self, master):
+        super().__init__(master)
         self.master = master
-        self.master.title('Species File Generator')
+        #self.master.title('Species File Generator')
         
         # set default number of species blocks
         self.num_species_blocks = tk.StringVar()
@@ -83,6 +84,42 @@ class App:
         success_label = tk.Label(self.master, text='File saved successfully!', fg='green')
         success_label.grid(row=len(self.species_blocks)+2, column=0, columnspan=2, pady=10)
 
-root = tk.Tk()
-app = App(root)
-root.mainloop()
+
+class Tab2(tk.Frame):
+    def __init__(self, master):
+        super().__init__(master)
+        self.label = tk.Label(self, text="Tab 2")
+        self.label.pack(pady=10, padx=10)
+
+class Tab3(tk.Frame):
+    def __init__(self, master):
+        super().__init__(master)
+        self.label = tk.Label(self, text="Tab 3")
+        self.label.pack(pady=10, padx=10)
+
+# root = tk.Tk()
+# app = App(root)
+# root.mainloop()
+
+class Application(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Multi-Tab Application")
+        self.geometry("300x200")
+        
+        # Create a notebook widget
+        self.notebook = ttk.Notebook(self)
+        self.notebook.pack(fill="both", expand=True)
+
+        # Create tabs and add them to the notebook
+        self.tab1 = App(self.notebook)
+        self.tab2 = Tab2(self.notebook)
+        self.tab3 = Tab3(self.notebook)
+
+        self.notebook.add(self.tab1, text="Tab 1")
+        self.notebook.add(self.tab2, text="Tab 2")
+        self.notebook.add(self.tab3, text="Tab 3")
+
+if __name__ == "__main__":
+    app = Application()
+    app.mainloop()
