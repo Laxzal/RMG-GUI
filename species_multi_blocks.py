@@ -7,7 +7,8 @@ class App(ttk.Frame):
         super().__init__(master)
         self.master = master
         #self.master.title('Species File Generator')
-        
+        self.label = tk.Label(self, text="Species Generator")
+        self.label.pack(pady=5, padx=5)
         # set default number of species blocks
         self.num_species_blocks = tk.StringVar()
         self.num_species_blocks.set('1')
@@ -49,7 +50,7 @@ class App(ttk.Frame):
 
             reactive_var = tk.BooleanVar()
             reactive_var.set(0)
-            reactive_check = tk.Checkbutton(root, text="Reactive", variable=reactive_var)
+            reactive_check = tk.Checkbutton(self.master, text="Reactive", variable=reactive_var)
             reactive_check.grid(row=i+2, column=5, padx=5, pady=5)
 
             self.species_blocks.append(species_label_entry)
@@ -105,10 +106,14 @@ class Application(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Multi-Tab Application")
-        self.geometry("300x200")
+        self.geometry("1900x900")
         
+        custom_style = ttk.Style()
+        custom_style.configure("CustomNotebook.TNotebook", tabposition="wn", tabmargins=[10, 10, 10, 0])
+        custom_style.configure("CustomNotebook.TNotebook.Tab", padding=[5, 5], font=("Helvetica", 14), foreground="#555", background="#ccc")
+
         # Create a notebook widget
-        self.notebook = ttk.Notebook(self)
+        self.notebook = ttk.Notebook(self, style="CustomNotebook.TNotebook")
         self.notebook.pack(fill="both", expand=True)
 
         # Create tabs and add them to the notebook
@@ -119,6 +124,8 @@ class Application(tk.Tk):
         self.notebook.add(self.tab1, text="Tab 1")
         self.notebook.add(self.tab2, text="Tab 2")
         self.notebook.add(self.tab3, text="Tab 3")
+
+
 
 if __name__ == "__main__":
     app = Application()
