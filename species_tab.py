@@ -53,10 +53,12 @@ class Species(tk.Frame):
             species_label_entry = tk.Entry(self.master, width=50)
             species_label_entry.grid(row=i+2, column=1, padx=5, pady=5, sticky='w')
             
-            species_smiles = tk.Label(self.master, text=f'SMILES {i+1}:')
-            species_smiles.grid(row=i+2, column=3, padx=5, pady=5)
-            species_smiles_entry = tk.Entry(self.master, width=50)
-            species_smiles_entry.grid(row=i+2, column=4, padx=5, pady=5, sticky='w')
+            #species_smiles = tk.Label(self.master, text=f'SMILES {i+1}:')
+            #species_smiles.grid(row=i+2, column=3, padx=5, pady=5)
+            species_adj_smiles = ttk.Combobox(self.master, width=15, state='readonly',values=['SMILES', 'AdjacencyList'])
+            species_adj_smiles.grid(row=i+2, column=3, padx=5, pady=5)
+            species_adj_smiles_entry = tk.Entry(self.master, width=50)
+            species_adj_smiles_entry.grid(row=i+2, column=4, padx=5, pady=5, sticky='w')
 
             reactive_var = tk.BooleanVar()
             reactive_var.set(0)
@@ -64,10 +66,11 @@ class Species(tk.Frame):
             reactive_check.grid(row=i+2, column=5, padx=5, pady=5)
 
             self.species_blocks.append(species_label_entry)
-            self.species_blocks.append(species_smiles_entry)
+            self.species_blocks.append(species_adj_smiles)
+            self.species_blocks.append(species_adj_smiles_entry)
             self.species_checks.append(reactive_var)
             self.species_labels_blocks.append(species_label)
-            self.species_labels_blocks.append(species_smiles)
+            #self.species_labels_blocks.append(species_smiles)
             self.species_labels_blocks.append(reactive_check)
     
     def spec_noinput_error(self):

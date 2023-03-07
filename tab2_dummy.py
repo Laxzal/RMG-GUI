@@ -38,11 +38,13 @@ class Tab2(tk.Frame):
         if email and species_blocks and species_checks:
             # create list of species SMILES from user input
             species_label = []
-            species_smiles = []
+            species_adj_smiles_choice = []
+            species_adj_smiles = []
             species_reactive = []
-            for i in range(0, len(species_blocks), 2):
+            for i in range(0, len(species_blocks), 3):
                 species_label.append(species_blocks[i].get())
-                species_smiles.append(species_blocks[i+1].get())
+                species_adj_smiles_choice.append(species_blocks[i+1].get())
+                species_adj_smiles.append(species_blocks[i+2].get())
             for i in range(0, len(species_checks)):
                 species_reactive.append(species_checks[i].get())
             
@@ -50,10 +52,10 @@ class Tab2(tk.Frame):
             file_content_datasource = f"database(\n\tthermoLibraries = [{thermo}],\n\treactionLibraries = [{kinetics}],\n\tseedMechanisms = [{seedmech}],\n\tkineticsDepositories = ['training'],\n\tkineticsFamilies = 'default',\n\tkineticsEstimator = 'rate rules'\n)"
             
             # create file contents SPECIES
-            file_content_species = f"species(\n    label='{species_label[0]}',\n    reactive={species_reactive[0]},\n    structure=SMILES('{species_smiles[0]}'),\n)\n\n"
-            if len(species_smiles) > 1:
-                for i in range(1, len(species_smiles)):
-                    file_content_species += f"species(\n    label='{species_label[i]}',\n    reactive={species_reactive[i]},\n    structure=SMILES('{species_smiles[i]}'),\n)\n\n"
+            file_content_species = f"species(\n    label='{species_label[0]}',\n    reactive={species_reactive[0]},\n    structure={species_adj_smiles_choice[0]}('{species_adj_smiles[0]}'),\n)\n\n"
+            if len(species_adj_smiles) > 1:
+                for i in range(1, len(species_adj_smiles)):
+                    file_content_species += f"species(\n    label='{species_label[i]}',\n    reactive={species_reactive[i]},\n    structure={species_adj_smiles_choice[i]}('{species_adj_smiles[i]}'),\n)\n\n"
             
             
             email_list = []
