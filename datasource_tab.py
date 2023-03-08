@@ -1,226 +1,207 @@
 import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox
-from tkinter import filedialog
 
-class ThermoSources(tk.Frame):
-    def __init__(self, parent):
-        super().__init__(parent)
-        def clear(): return
-        self.options = ["primaryThermoLibrary","DFT_QCI_thermo","GRI-Mech3.0","CBS_QB3_1dHR","thermo_DFT_CCSDTF12_BAC","SABIC_aromatics","C3","Fulvene_H","BurkeH2O2","Chlorinated_Hydrocarbons","heavy_oil_ccsdtf12_1dHR","Narayanaswamy","CHN","CHOFClBr_G4","vinylCPD_H","CHOFBr_G4","CHOClBr_G4","SABIC_aromatics_1dHR","SulfurGlarborgH2S","CHOFCl_G4","naphthalene_H","s3_5_7_ane","NOx2018","iodinated_Hydrocarbons","JetSurF1.0","SulfurGlarborgMarshall","SABIC_aromatics_1dHR_extended","CH","NitrogenCurran","CHO","bio_oil","2-BTP","SulfurLibrary","CHOCl_G4","C10H11","CHON_G4","Klippenstein_Glarborg2016","2-BTP_G4","primaryNS","CurranPentane","halogens","USC-Mech-ii","GRI-Mech3.0-N","Fluorine","JetSurF2.0","FFCM1(-)","Chlorination","SulfurGlarborgNS","CHOBr_G4","surfaceThermoNi111","surfaceThermoPt111","NISTThermoLibrary","Lai_Hexylbenzene","SulfurHaynes","CN","BurcatNS","SulfurGlarborgBozzelli","Chernov","Spiekermann_refining_elementary_reactions","CHOF_G4","CHON"]
-        select = unselect = done = clear
-        self.selected = []
-        self.not_selected = list(self.options)
-        
-        # lf = ttk.LabelFrame(parent, text="Select options:")
-        # lf.grid(column=0, row=0, padx=20, pady=20)
-        
-        # self.selected_listbox = tk.Listbox(lf, selectmode=tk.MULTIPLE)
-        # self.selected_listbox.grid(column=2, row=0, padx=10, pady=10)
-        # self.selected_listbox.config(width=30, height=20)
-        
-        # self.not_selected_listbox = tk.Listbox(lf, selectmode=tk.MULTIPLE)
-        # self.not_selected_listbox.grid(column=0, row=0, padx=10, pady=10)
-        # self.not_selected_listbox.config(width=30, height=20)
-        
-        # midpoint = (self.selected_listbox.grid_info()['row'] + self.not_selected_listbox.grid_info()['row']) // 2
-        
-        # self.add_button = tk.Button(lf, text='Add >>', command=self.add_selected)
-        # self.add_button.grid(column=1, row=midpoint, padx=2, sticky='EW', rowspan=2)
+class DualListBoxes(tk.Frame):
+    def __init__(self, master, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.master = master
+        self.items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6']
+        self.options_thermo = ["primaryThermoLibrary","DFT_QCI_thermo","GRI-Mech3.0",
+                               "CBS_QB3_1dHR","thermo_DFT_CCSDTF12_BAC","SABIC_aromatics",
+                               "C3","Fulvene_H","BurkeH2O2","Chlorinated_Hydrocarbons",
+                               "heavy_oil_ccsdtf12_1dHR","Narayanaswamy","CHN","CHOFClBr_G4",
+                               "vinylCPD_H","CHOFBr_G4","CHOClBr_G4","SABIC_aromatics_1dHR",
+                               "SulfurGlarborgH2S","CHOFCl_G4","naphthalene_H","s3_5_7_ane",
+                               "NOx2018","iodinated_Hydrocarbons","JetSurF1.0",
+                               "SulfurGlarborgMarshall","SABIC_aromatics_1dHR_extended",
+                               "CH","NitrogenCurran","CHO","bio_oil","2-BTP","SulfurLibrary",
+                               "CHOCl_G4","C10H11","CHON_G4","Klippenstein_Glarborg2016",
+                               "2-BTP_G4","primaryNS","CurranPentane","halogens","USC-Mech-ii",
+                               "GRI-Mech3.0-N","Fluorine","JetSurF2.0","FFCM1(-)","Chlorination",
+                               "SulfurGlarborgNS","CHOBr_G4","surfaceThermoNi111","surfaceThermoPt111",
+                               "NISTThermoLibrary","Lai_Hexylbenzene","SulfurHaynes","CN","BurcatNS",
+                               "SulfurGlarborgBozzelli","Chernov","Spiekermann_refining_elementary_reactions",
+                               "CHOF_G4","CHON"]
+        self.options_kinetic = ['1989_Stewart_2CH3_to_C2H5_H', '2-BTP/full', '2-BTP/seed', 
+                                '2001_Tokmakov_H_Toluene_to_CH3_Benzene', 
+                                '2003_Miller_Propargyl_Recomb_High_P', 
+                                '2005_Senosiain_OH_C2H2', '2006_Joshi_OH_CO', 
+                                '2009_Sharma_C5H5_CH3_highP', '2015_Buras_C2H3_C4H6_highP', 
+                                'Aromatics_high_pressure/C10H10_1', 
+                                'Aromatics_high_pressure/C10H10_2', 
+                                'Aromatics_high_pressure/C10H10_H_abstraction', 
+                                'Aromatics_high_pressure/C10H11_1', 
+                                'Aromatics_high_pressure/C10H11_2', 
+                                'Aromatics_high_pressure/C10H11_3', 
+                                'Aromatics_high_pressure/C10H11_4', 
+                                'Aromatics_high_pressure/C10H7', 
+                                'Aromatics_high_pressure/C10H8_H_abstraction_H_recomb',
+                                'Aromatics_high_pressure/C10H9_1', 
+                                'Aromatics_high_pressure/C10H9_2', 
+                                'Aromatics_high_pressure/C10H9_3', 
+                                'Aromatics_high_pressure/C10H9_4', 'Aromatics_high_pressure/C12H10_1', 
+                                'Aromatics_high_pressure/C12H10_2', 'Aromatics_high_pressure/C12H10_H_abstraction', 
+                                'Aromatics_high_pressure/C12H11', 'Aromatics_high_pressure/C12H8_H_abstraction', 
+                                'Aromatics_high_pressure/C12H9', 'Aromatics_high_pressure/C14H10_H_abstraction_H_recomb', 
+                                'Aromatics_high_pressure/C14H11_1', 'Aromatics_high_pressure/C14H11_2', 'Aromatics_high_pressure/C14H11_3', 
+                                'Aromatics_high_pressure/C14H11_4', 'Aromatics_high_pressure/C14H9', 'Aromatics_high_pressure/C16H11', 
+                                'Aromatics_high_pressure/C7H8', 'Aromatics_high_pressure/C7H8_H_abstraction', 'Aromatics_high_pressure/C7H9', 
+                                'Aromatics_high_pressure/C8H5O2_H_abstraction', 'Aromatics_high_pressure/C8H5O2_oxid_CO', 
+                                'Aromatics_high_pressure/C8H5O2_oxid_CO2', 'Aromatics_high_pressure/C8H6_1', 'Aromatics_high_pressure/C8H6_2', 
+                                'Aromatics_high_pressure/C8H6_H_abstraction', 'Aromatics_high_pressure/C8H7_1', 'Aromatics_high_pressure/C8H7_2', 
+                                'Aromatics_high_pressure/C8H7_3', 'Aromatics_high_pressure/C8H7_H_abstraction', 'Aromatics_high_pressure/C8H8', 
+                                'Aromatics_high_pressure/C9H5_H_abstraction', 'Aromatics_high_pressure/C9H5_oxid_CO', 'Aromatics_high_pressure/C9H5_oxid_CO2', 
+                                'Aromatics_high_pressure/C9H6_1', 'Aromatics_high_pressure/C9H6_2', 'Aromatics_high_pressure/C9H6_H_abstraction', 
+                                'Aromatics_high_pressure/C9H7',    "Aromatics_high_pressure/C9H8_1",
+                                "Aromatics_high_pressure/C9H8_2",
+                                "Aromatics_high_pressure/C9H8_H_abstraction",
+                                "Aromatics_high_pressure/C9H9_1",
+                                "Aromatics_high_pressure/C9H9_2",
+                                "BurkeH2O2inArHe",
+                                "BurkeH2O2inN2",
+                                "C10H11",
+                                "C12H11_pdep",
+                                "C2H2_init",
+                                "C2H4+O_Klipp2017",
+                                "C3",
+                                "C6H5_C4H4_Mebel",
+                                "CF2BrCl",
+                                "CH3Cl",
+                                "Chernov",
+                                "CurranPentane",
+                                "DMSOxy",
+                                "DTU_mech_CH3Cl",
+                                "Dooley/C1",
+                                "Dooley/methylformate",
+                                "Dooley/methylformate_2",
+                                "Dooley/methylformate_all_ARHEbathgas",
+                                "Dooley/methylformate_all_N2bathgas",
+                                "ERC-FoundationFuelv0.9",
+                                "Ethylamine",
+                                "FFCM1(-)",
+                                "First_to_Second_Aromatic_Ring/2005_Ismail_C6H5_C4H6_highP",
+                                "First_to_Second_Aromatic_Ring/2012_Matsugi_C3H3_C7H7_highP",
+                                "First_to_Second_Aromatic_Ring/2016_Mebel_C10H9_highP",
+                                "First_to_Second_Aromatic_Ring/2016_Mebel_C9H9_highP",
+                                "First_to_Second_Aromatic_Ring/2016_Mebel_Indene_CH3_highP",
+                                "First_to_Second_Aromatic_Ring/2017_Buras_C6H5_C3H6_highP",
+                                "First_to_Second_Aromatic_Ring/2017_Mebel_C6H4C2H_C2H2_highP",
+                                "First_to_Second_Aromatic_Ring/2017_Mebel_C6H5C2H2_C2H2_highP",
+                                "First_to_Second_Aromatic_Ring/2017_Mebel_C6H5_C2H2_highP",
+                                "First_to_Second_Aromatic_Ring/2017_Mebel_C6H5_C4H4_highP",
+                                "First_to_Second_Aromatic_Ring/phenyl_diacetylene_effective",
+                                'Fulvene_H', 'GRI-HCO', 'GRI-Mech3.0', 'GRI-Mech3.0-N', 'Glarborg/C0', 'Glarborg/C1', 'Glarborg/C2', 'Glarborg/C3', 'Glarborg/highP', 'HydrazinePDep', 'Iodine-R_recombination', 'JetSurF1.0', 'JetSurF2.0', 'Klippenstein_Glarborg2016', 'Lai_Hexylbenzene', 'Mebel_C6H5_C2H2', 'Mebel_Naphthyl', 'Methylformate', 'N-S_interactions', 'NIST_Fluorine/CH2F2/full', 'NIST_Fluorine/CH2F2/seed', 'NIST_Fluorine/full', 'NIST_Fluorine/seed', 'NOx2018', 'Narayanaswamy', 'Nitrogen_Dean_and_Bozzelli', 'Nitrogen_Glarborg_Gimenez_et_al', 'Nitrogen_Glarborg_Lucassen_et_al', 'Nitrogen_Glarborg_Zhang_et_al', 'Sulfur/DMDS', 'Sulfur/DMS', 'Sulfur/DTBS', 'Sulfur/GlarborgBozzelli', 'Sulfur/GlarborgH2S', 'Sulfur/GlarborgH2S/alt', 'Sulfur/GlarborgMarshall', 'Sulfur/GlarborgNS', 'Sulfur/HSSH_1bar', 'Sulfur/Hexanethial_nr', 'Sulfur/Sendt', 'Sulfur/TP_Song', 'Sulfur/Thial_Hydrolysis', 'Surface/Ammonia/Duan_Ni111', 'Surface/Ammonia/Duan_Ni211', 'Surface/Ammonia/Kraehnert_Pt111', 'Surface/Ammonia/Novell_Pd111', 'Surface/Ammonia/Novell_Pt111', 'Surface/Ammonia/Novell_Rh111', 'Surface/Ammonia/Offermans_Pt111', 'Surface/Ammonia/Popa_Rh111', 'Surface/Ammonia/Rebrov_Pt111', 'Surface/Ammonia/Roldan_Ru0001', 'Surface/Ammonia/Scheuer_Pt', 'Surface/Ammonia/Schneider_Pd111', 'Surface/Ammonia/Schneider_Pd211', 'Surface/Ammonia/Schneider_Pt111', 'Surface/Ammonia/Schneider_Pt211', 'Surface/Ammonia/Schneider_Rh111',
+                                "Surface/Ammonia/Schneider_Rh211",
+                                "Surface/Ammonia/Vlachos_Ru0001",
+                                "Surface/CPOX_Pt/Deutschmann2006_adjusted",
+                                "Surface/DOC/Arevalo_Pt111",
+                                "Surface/DOC/Ishikawa_Rh111",
+                                "Surface/DOC/Mhadeshwar_Pt111",
+                                "Surface/DOC/Nitrogen",
+                                "Surface/Example",
+                                "Surface/Hydrazine/Roldan_Cu111",
+                                "Surface/Hydrazine/Roldan_Ir111",
+                                "Surface/Methane/Deutschmann_Ni",
+                                "Surface/Methane/Deutschmann_Ni_full",
+                                "Surface/Methane/Deutschmann_Pt",
+                                "Surface/Methane/Vlachos_Pt111",
+                                "Surface/Methane/Vlachos_Rh",
+                                "TEOS",
+                                "YF/full",
+                                "YF/seed",
+                                "biCPD_H_shift",
+                                "c-C5H5_CH3_Sharma",
+                                "combustion_core/version2",
+                                "combustion_core/version3",
+                                "combustion_core/version4",
+                                "combustion_core/version5",
+                                "fascella",
+                                "kislovB",
+                                "naphthalene_H",
+                                "primaryH2O2",
+                                "primaryNitrogenLibrary",
+                                "primaryNitrogenLibrary/LowT",
+                                "primarySulfurLibrary",
+                                "vinylCPD_H"
+                                ]
 
-        # self.remove_button = tk.Button(lf, text='<< Remove', command=self.remove_selected)
-        # self.remove_button.grid(column=1, row=midpoint+1, padx=2,sticky='EW', rowspan=2)
-        
-        
-        frame0 = ttk.Frame(parent)
-        frame0.grid(row=0, column=0, sticky='nswe', padx=5, pady=5, columnspan=3)
-        frame0.grid_columnconfigure(0, weight=1)
-        lblentry = ttk.Label(frame0, text="Entry Box:")
-        lblentry.grid(row=0, column=0, sticky='W')
-        self.entrybx = ttk.Entry(frame0)
-        self.entrybx.grid(row=1, column=0, sticky='nswe', columnspan=1)
-        entrybt = ttk.Button(frame0, text=' Enter ', command=self.enter)
-        entrybt.grid(row=1, column=2, sticky='nswe', padx=3)
-        
-        
-        frame1 = ttk.Frame(parent)
-        frame1.grid(row=1, column=0, sticky='nswe', padx=5, pady=5)
-        lblshow_lst = ttk.Label(frame1, text="Unselected Thermo Libraries:")
-        lblshow_lst.grid(row=0, sticky='nswe')
-        self.not_selected_listbox = tk.Listbox(frame1, selectmode=tk.EXTENDED)
-        self.not_selected_listbox.grid(row=1, sticky='W')
-        
-        
-        frame2 = ttk.Frame(parent)
-        frame2.grid(row=1, column=1, sticky='W')
-        selbtn = ttk.Button(frame2, text='Select', command=self.add_selected)
-        selbtn.grid(row=0, padx=5, sticky='W')
-        uselbtn = ttk.Button(frame2, text='Unselect', command=self.remove_selected)
-        uselbtn.grid(row=1, padx=5, sticky='W')
-        
-        
-        frame3 = ttk.Frame(parent)
-        frame3.grid(row=1, column=2, sticky='nswe', padx=5, pady=5)
-        lblsel_lst = ttk.Label(frame3, text="Selected Thermo Libraries:")
-        lblsel_lst.grid(row=0, sticky='nswe')
-        self.selected_listbox = tk.Listbox(frame3, selectmode=tk.EXTENDED)
-        self.selected_listbox.grid(row=1, column=0, sticky='W')
-        
-        frame4 = ttk.Frame(parent)
-        frame4.grid(row=2, column=0, sticky='nswe', padx=5, pady=5, columnspan=3)
-        frame4.grid_columnconfigure(0, weight=1)
-        ttk.Button(frame4, text=' Done ', command=done).grid(
-            row=0, column=0, padx=7, pady=2, sticky='E')
-        ttk.Button(frame4, text='Clear', command=self.clear_listbox).grid(
-            row=0, column=1, padx=7, pady=2, sticky='E')
-        self.update_lists()
+        # Create Headings
+        self.left_listbox_1_heading = tk.Label(self, text='Unselected ThermoLib')
+        self.right_listbox_1_heading = tk.Label(self, text='Selected ThermoLib')
+        self.left_listbox_2_heading = tk.Label(self, text='Unselected KineticsLib')
+        self.right_listbox_2_heading = tk.Label(self, text='Selected KineticsLib')
+        self.left_listbox_3_heading = tk.Label(self, text='Unselected SeedMech')
+        self.right_listbox_3_heading = tk.Label(self, text='Selected SeedMech')
 
-    def update_lists(self):
-        self.selected_listbox.delete(0, tk.END)
-        for item in self.selected:
-            self.selected_listbox.insert(tk.END, item)
-            
-        self.not_selected_listbox.delete(0, tk.END)
-        for item in self.not_selected:
-            self.not_selected_listbox.insert(tk.END, item)
+        # Create the first pair of Listboxes
+        self.left_listbox_1 = tk.Listbox(self, height=10,width=75, selectmode=tk.EXTENDED)
+        self.right_listbox_1 = tk.Listbox(self, height=10,width=75, selectmode=tk.EXTENDED)
 
-    def add_selected(self):
-        selected_items = self.not_selected_listbox.curselection()
-        selected_items = [self.not_selected[index] for index in selected_items]
-        for item in selected_items:
-            self.selected.append(item)
-            self.not_selected.remove(item)
-        self.update_lists()
+        for item in self.options_thermo:
+            self.left_listbox_1.insert(tk.END, item)
 
-    def remove_selected(self):
-        selected_items = self.selected_listbox.curselection()
-        selected_items = [self.selected[index] for index in selected_items]
-        for item in selected_items:
-            self.not_selected.append(item)
-            self.selected.remove(item)
-        self.update_lists()
+        # Create the second pair of Listboxes
+        self.left_listbox_2 = tk.Listbox(self, height=10,width=75, selectmode=tk.EXTENDED)
+        self.right_listbox_2 = tk.Listbox(self, height=10,width=75, selectmode=tk.EXTENDED)
+
+        for item in self.options_kinetic:
+            self.left_listbox_2.insert(tk.END, item)
+
+        # Create the third pair of Listboxes
+        self.left_listbox_3 = tk.Listbox(self, height=10,width=75, selectmode=tk.EXTENDED)
+        self.right_listbox_3 = tk.Listbox(self, height=10,width=75, selectmode=tk.EXTENDED)
+
+        for item in self.options_kinetic:
+            self.left_listbox_3.insert(tk.END, item)
+
+        # Set the layout of the Headings
+        self.left_listbox_1_heading.grid(row=0, column=0, padx=5)
+        self.right_listbox_1_heading.grid(row=0, column=1, padx=5)
+        self.left_listbox_2_heading.grid(row=7, column=0, padx=5)
+        self.right_listbox_2_heading.grid(row=7, column=1, padx=5)
+        self.left_listbox_3_heading.grid(row=10, column=0, padx=5)
+        self.right_listbox_3_heading.grid(row=10, column=1, padx=5)
+
+        
+        # Set the layout of the Listboxes
+        self.left_listbox_1.grid(row=2, column=0, padx=10, rowspan=2)
+        self.right_listbox_1.grid(row=2, column=1, padx=10, rowspan=2)
+        self.left_listbox_2.grid(row=8, column=0, padx=10, rowspan=2)
+        self.right_listbox_2.grid(row=8, column=1, padx=10, rowspan=2)
+        self.left_listbox_3.grid(row=11, column=0, padx=10, rowspan=2)
+        self.right_listbox_3.grid(row=11, column=1, padx=10, rowspan=2)
+
+        # Create buttons to move items between Listboxes
+        self.button_1 = tk.Button(self, text='>>', command=lambda: self.move_items(self.left_listbox_1, self.right_listbox_1))
+        self.button_2 = tk.Button(self, text='<<', command=lambda: self.move_items(self.right_listbox_1, self.left_listbox_1))
+        self.button_3 = tk.Button(self, text='>>', command=lambda: self.move_items(self.left_listbox_2, self.right_listbox_2))
+        self.button_4 = tk.Button(self, text='<<', command=lambda: self.move_items(self.right_listbox_2, self.left_listbox_2))
+        self.button_5 = tk.Button(self, text='>>', command=lambda: self.move_items(self.left_listbox_3, self.right_listbox_3))
+        self.button_6 = tk.Button(self, text='<<', command=lambda: self.move_items(self.right_listbox_3, self.left_listbox_3))
+
+        # Set the layout of the buttons
+        self.button_1.grid(row=2, column=2, pady=10)
+        self.button_2.grid(row=3, column=2, pady=10)
+        self.button_3.grid(row=8, column=2, pady=10)
+        self.button_4.grid(row=9, column=2, pady=10)
+        self.button_5.grid(row=11, column=2, pady=10)
+        self.button_6.grid(row=12, column=2, pady=10)
+    # Define a function to move items between Listboxes
+    def move_items(self,left_listbox, right_listbox):
+        selected_indices = left_listbox.curselection()
+        for index in reversed(selected_indices):
+            right_listbox.insert(tk.END, left_listbox.get(index))
+            left_listbox.delete(index)
     
-    def enter(self):
-        entry_text = self.entrybx.get()
-        if entry_text:
-            self.selected_listbox.insert(tk.END, entry_text)
-            self.selected.append(entry_text)
-            if entry_text in self.not_selected:
-                self.not_selected.remove(entry_text)
-            self.entrybx.delete(0, tk.END)
-            
-    def clear_listbox(self):
-        self.selected_listbox.delete(0, tk.END)
-        self.selected = []
-    
-    
-class ReactionSources(tk.Frame):
-    def __init__(self, parent):
-        super().__init__(parent)
-        def clear(): return
-        self.options = ["primaryThermoLibrary","DFT_QCI_thermo","GRI-Mech3.0","CBS_QB3_1dHR","thermo_DFT_CCSDTF12_BAC","SABIC_aromatics","C3","Fulvene_H","BurkeH2O2","Chlorinated_Hydrocarbons","heavy_oil_ccsdtf12_1dHR","Narayanaswamy","CHN","CHOFClBr_G4","vinylCPD_H","CHOFBr_G4","CHOClBr_G4","SABIC_aromatics_1dHR","SulfurGlarborgH2S","CHOFCl_G4","naphthalene_H","s3_5_7_ane","NOx2018","iodinated_Hydrocarbons","JetSurF1.0","SulfurGlarborgMarshall","SABIC_aromatics_1dHR_extended","CH","NitrogenCurran","CHO","bio_oil","2-BTP","SulfurLibrary","CHOCl_G4","C10H11","CHON_G4","Klippenstein_Glarborg2016","2-BTP_G4","primaryNS","CurranPentane","halogens","USC-Mech-ii","GRI-Mech3.0-N","Fluorine","JetSurF2.0","FFCM1(-)","Chlorination","SulfurGlarborgNS","CHOBr_G4","surfaceThermoNi111","surfaceThermoPt111","NISTThermoLibrary","Lai_Hexylbenzene","SulfurHaynes","CN","BurcatNS","SulfurGlarborgBozzelli","Chernov","Spiekermann_refining_elementary_reactions","CHOF_G4","CHON"]
-        select = unselect = done = clear
-        self.selected = []
-        self.not_selected = list(self.options)
+    def datasource_items(self):
+        thermo = []
+        kinetic = []
+        seedmec = []
         
-        # lf = ttk.LabelFrame(parent, text="Select options:")
-        # lf.grid(column=0, row=0, padx=20, pady=20)
+        thermo_get = self.right_listbox_1.get(0, tk.END)
+        kinetic_get = self.right_listbox_2.get(0, tk.END)
+        seedmec_get = self.right_listbox_3.get(0, tk.END)
         
-        # self.selected_listbox = tk.Listbox(lf, selectmode=tk.MULTIPLE)
-        # self.selected_listbox.grid(column=2, row=0, padx=10, pady=10)
-        # self.selected_listbox.config(width=30, height=20)
-        
-        # self.not_selected_listbox = tk.Listbox(lf, selectmode=tk.MULTIPLE)
-        # self.not_selected_listbox.grid(column=0, row=0, padx=10, pady=10)
-        # self.not_selected_listbox.config(width=30, height=20)
-        
-        # midpoint = (self.selected_listbox.grid_info()['row'] + self.not_selected_listbox.grid_info()['row']) // 2
-        
-        # self.add_button = tk.Button(lf, text='Add >>', command=self.add_selected)
-        # self.add_button.grid(column=1, row=midpoint, padx=2, sticky='EW', rowspan=2)
-
-        # self.remove_button = tk.Button(lf, text='<< Remove', command=self.remove_selected)
-        # self.remove_button.grid(column=1, row=midpoint+1, padx=2,sticky='EW', rowspan=2)
-        
-        
-        frame0 = ttk.Frame(parent)
-        frame0.grid(row=0, column=20, sticky='WE', padx=5, pady=5, columnspan=3)
-        frame0.grid_columnconfigure(1, weight=1)
-        lblentry = ttk.Label(frame0, text="Entry Box:")
-        lblentry.grid(row=0, column=22, sticky='W')
-        self.entrybx = ttk.Entry(frame0)
-        self.entrybx.grid(row=1, column=22, sticky='NSEW', columnspan=1)
-        entrybt = ttk.Button(frame0, text=' Enter ', command=self.enter)
-        entrybt.grid(row=1, column=23, sticky='NW', padx=3)
-        
-        
-        frame1 = ttk.Frame(parent)
-        frame1.grid(row=1, column=23, sticky='nswe', padx=5, pady=5)
-        lblshow_lst = ttk.Label(frame1, text="Unselected Thermo Libraries:")
-        lblshow_lst.grid(row=0, sticky='nswe')
-        self.not_selected_listbox = tk.Listbox(frame1, selectmode=tk.EXTENDED)
-        self.not_selected_listbox.grid(row=1, sticky='nswe')
-        
-        
-        frame2 = ttk.Frame(parent)
-        frame2.grid(row=1, column=24, sticky='W')
-        selbtn = ttk.Button(frame2, text='Select', command=self.add_selected)
-        selbtn.grid(row=0, padx=2, sticky='W')
-        uselbtn = ttk.Button(frame2, text='Unselect', command=self.remove_selected)
-        uselbtn.grid(row=1, padx=2, sticky='W')
-        
-        
-        frame3 = ttk.Frame(parent)
-        frame3.grid(row=1, column=25, sticky='nswe', padx=5, pady=5)
-        lblsel_lst = ttk.Label(frame3, text="Selected Thermo Libraries:")
-        lblsel_lst.grid(row=0, sticky='nswe')
-        self.selected_listbox = tk.Listbox(frame3, selectmode=tk.EXTENDED)
-        self.selected_listbox.grid(row=1, column=0, sticky='W')
-        
-        frame4 = ttk.Frame(parent)
-        frame4.grid(row=2, column=25, sticky='nswe', padx=5, pady=5, columnspan=3)
-        frame4.grid_columnconfigure(0, weight=1)
-        ttk.Button(frame4, text=' Done ', command=done).grid(
-            row=0, column=15, padx=7, pady=2, sticky='nswe')
-        ttk.Button(frame4, text='Clear', command=self.clear_listbox).grid(
-            row=0, column=26, padx=7, pady=2, sticky='nswe')
-        self.update_lists()
-
-    def update_lists(self):
-        self.selected_listbox.delete(0, tk.END)
-        for item in self.selected:
-            self.selected_listbox.insert(tk.END, item)
-            
-        self.not_selected_listbox.delete(0, tk.END)
-        for item in self.not_selected:
-            self.not_selected_listbox.insert(tk.END, item)
-
-    def add_selected(self):
-        selected_items = self.not_selected_listbox.curselection()
-        selected_items = [self.not_selected[index] for index in selected_items]
-        for item in selected_items:
-            self.selected.append(item)
-            self.not_selected.remove(item)
-        self.update_lists()
-
-    def remove_selected(self):
-        selected_items = self.selected_listbox.curselection()
-        selected_items = [self.selected[index] for index in selected_items]
-        for item in selected_items:
-            self.not_selected.append(item)
-            self.selected.remove(item)
-        self.update_lists()
-    
-    def enter(self):
-        entry_text = self.entrybx.get()
-        if entry_text:
-            self.selected_listbox.insert(tk.END, entry_text)
-            self.selected.append(entry_text)
-            if entry_text in self.not_selected:
-                self.not_selected.remove(entry_text)
-            self.entrybx.delete(0, tk.END)
-            
-    def clear_listbox(self):
-        self.selected_listbox.delete(0, tk.END)
-        self.selected = []
-    
+        if thermo_get and kinetic_get and seedmec_get:
+            return thermo_get, kinetic_get, seedmec_get
+        else:
+            return [], [], []
