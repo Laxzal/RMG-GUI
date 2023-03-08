@@ -3,14 +3,14 @@ from tkinter import ttk
 from tkinter import messagebox
 from species_tab import Species as Tab1
 from tab2_dummy import Tab2 as Tab2
-from datasource_tab import ThermoSources, ReactionSources
-from tab_multi_listox import DualListBoxes
+from deprecated_tab import ThermoSources, ReactionSources
+from datasource_tab import DualListBoxes
 from reactor_system import simpleReactor
 
 class MainApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("1200x1200")
+        self.geometry("1200x600")
 
         self.title("My App")
          
@@ -43,7 +43,7 @@ class MainApp(tk.Tk):
         self.datasource_tab_label.pack(fill='both', expand=True)
         self.tab1 = Tab1(self.species_tab)
         self.reactors_tab_label = simpleReactor(self.reactors_tab, self.tab1)
-        self.reactors_tab_label.pack(fill='both', expand=True)
+        #self.reactors_tab_label.pack(fill='both', expand=True)
 
         tab2 = Tab2(self.notebook,self.datasource_tab_label ,self.tab1)
 

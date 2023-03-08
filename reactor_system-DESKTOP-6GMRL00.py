@@ -1,13 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
-import customtkinter as ctk
 
 
-class simpleReactor(ctk.CTkFrame):
+class simpleReactor(tk.Frame):
 
     def __init__(self, master, species_tab) -> None:
-        super().__init__(master)
+        super().__init__()
         self.master = master
 
         self.frame0=ttk.Frame(self.master)
@@ -82,13 +81,11 @@ class simpleReactor(ctk.CTkFrame):
 
 
         # Create Sensitivity checkbox and listbox
-        self.frame1 = ttk.Frame(self.master)
         self.sensitivity_label = ttk.Label(self.frame0, text="Sensitivity",  justify=tk.CENTER, width=20, anchor='center')
-        self.sensitivity_label.grid(row=1, column=10, padx=5, pady=5, sticky='we', columnspan=3)
+        self.sensitivity_label.grid(row=1, column=10, padx=5, pady=5, sticky='we')
         self.sensitivity_var = tk.BooleanVar()
         self.sensitivity_check = tk.Checkbutton(self.frame0, text="Use sensitivity", variable=self.sensitivity_var, 
                                                 command=self.show_sensitivity)
-        self.sensitivity_check.grid(row=1, column=12, padx=5, pady=5, sticky='w')
         self.sensitivity_left_listbox_label = ttk.Label(self.frame0, text="Unselected Species:",  justify=tk.CENTER, width=20)
         self.sensitivity_left_listbox_label.grid(row=2, column=10, padx=5, pady=5, sticky='nswe')
         self.sensitivity_right_listbox_label = ttk.Label(self.frame0, text="Selected Species:",  justify=tk.CENTER, width=20)
