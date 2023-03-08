@@ -15,7 +15,7 @@ class App(ttk.Frame):
         num_species_menu_label.grid(row=0, column=0)
         num_species_menu = ttk.Combobox(self.master, width=2, textvariable=self.num_species_blocks, state='readonly')
         num_species_menu.grid(row=0, column=1)
-        num_species_menu['values'] = ('1', '2', '3', '4', '5')
+        num_species_menu['values'] = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10')
         num_species_menu.bind('<<ComboboxSelected>>', self.on_select)
         num_species_menu.current(0)
         

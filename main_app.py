@@ -5,6 +5,7 @@ from species_tab import Species as Tab1
 from tab2_dummy import Tab2 as Tab2
 from datasource_tab import ThermoSources, ReactionSources
 from tab_multi_listox import DualListBoxes
+from reactor_system import simpleReactor
 
 class MainApp(tk.Tk):
     def __init__(self):
@@ -24,10 +25,12 @@ class MainApp(tk.Tk):
         self.datasources_tab = ttk.Frame(self.notebook)
         self.deprecated_tab = ttk.Frame(self.notebook)
         self.species_tab = ttk.Frame(self.notebook)
+        self.reactors_tab = ttk.Frame(self.notebook)
         
         self.notebook.add(self.datasources_tab, text="Data Sources")
         self.notebook.add(self.deprecated_tab, text="Deprecated")
         self.notebook.add(self.species_tab, text='Species Generator')
+        self.notebook.add(self.reactors_tab, text='Reactor Generator')
 
         
         self.thermo_sources = ThermoSources(self.deprecated_tab)
@@ -39,6 +42,9 @@ class MainApp(tk.Tk):
         self.datasource_tab_label = DualListBoxes(self.datasources_tab)
         self.datasource_tab_label.pack(fill='both', expand=True)
         self.tab1 = Tab1(self.species_tab)
+        self.reactors_tab_label = simpleReactor(self.reactors_tab, self.tab1)
+        self.reactors_tab_label.pack(fill='both', expand=True)
+
         tab2 = Tab2(self.notebook,self.datasource_tab_label ,self.tab1)
 
         self.notebook.add(tab2, text="Tab 2")
