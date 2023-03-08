@@ -9,16 +9,13 @@ class App(ttk.Frame):
         #self.master.title('Species File Generator')
         self.label = tk.Label(self, text="Species Generator")
         self.label.pack(pady=5, padx=5)
-        # set default number of species blocks
-        self.num_species_blocks = tk.StringVar()
-        self.num_species_blocks.set('1')
-        
+
         # create dropdown menu to select number of species blocks
         num_species_menu_label = tk.Label(self.master, text='Number of Species Blocks:')
         num_species_menu_label.grid(row=0, column=0)
         num_species_menu = ttk.Combobox(self.master, width=2, textvariable=self.num_species_blocks, state='readonly')
         num_species_menu.grid(row=0, column=1)
-        num_species_menu['values'] = ('1', '2', '3', '4', '5')
+        num_species_menu['values'] = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10')
         num_species_menu.bind('<<ComboboxSelected>>', self.on_select)
         num_species_menu.current(0)
         
