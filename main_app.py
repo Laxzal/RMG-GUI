@@ -13,6 +13,7 @@ from mlEstimator import mlEstimator
 from pressureDependence import pressureDependence
 from uncertainty_analysis import uncertaintyAnalysis
 from miscellaneous_opts import miscellaneousOptions
+from generateSpeciesConstraint import generateSpeciesConstraint
 
 class MainApp(tk.Tk):
     def __init__(self):
@@ -41,6 +42,7 @@ class MainApp(tk.Tk):
         self.pressure_tab = ttk.Frame(self.notebook)
         self.uncertainty_tab = ttk.Frame(self.notebook)
         self.miscellaneous_tab = ttk.Frame(self.notebook)
+        self.generate_species_constraint_tab = ttk.Frame(self.notebook)
 
 
         self.notebook.add(self.datasources_tab, text="Data Sources")
@@ -55,6 +57,7 @@ class MainApp(tk.Tk):
         self.notebook.add(self.pressure_tab, text='Pressure Dependence Generator')
         self.notebook.add(self.uncertainty_tab, text='Uncertainty Analysis Generator')
         self.notebook.add(self.miscellaneous_tab, text='Miscellaneous Options Generator')
+        self.notebook.add(self.generate_species_constraint_tab, text='Generate Species Constraint')
 
 
         self.thermo_sources = ThermoSources(self.deprecated_tab)
@@ -75,6 +78,7 @@ class MainApp(tk.Tk):
         self.pressure_tab_label = pressureDependence(self.pressure_tab)
         self.uncertainty_tab_label = uncertaintyAnalysis(self.uncertainty_tab)
         self.miscellaneous_tab_label = miscellaneousOptions(self.miscellaneous_tab)
+        self.generate_species_constraint_tab_label = generateSpeciesConstraint(self.generate_species_constraint_tab)
 
         tab2 = Tab2(self.notebook,self.datasource_tab_label ,self.tab1)
 
