@@ -196,7 +196,8 @@ class mlEstimator(ctk.CTkFrame):
         self.CpUncertaintyCutOffEntry = ttk.Entry(self.frame16, textvariable=self.CpUncertaintyCutOff)
         self.CpUncertaintyCutOffEntry.grid(row=0, column=1, sticky='w')
         self.CpUncertaintyCutOffEntry.config(validate='key', validatecommand=(self.register(self.validateFloat), '%P'))
-        
+
+
 
     def validateFloat(self, P):
         if P == '':

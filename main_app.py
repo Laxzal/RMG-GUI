@@ -10,6 +10,9 @@ from simulator_tolerances import simulatorTolerances
 from model_tolerances import modelTolerances
 from quantummechanics_tab import quantumMechanics
 from mlEstimator import mlEstimator
+from pressureDependence import pressureDependence
+from uncertainty_analysis import uncertaintyAnalysis
+from miscellaneous_opts import miscellaneousOptions
 
 class MainApp(tk.Tk):
     def __init__(self):
@@ -35,6 +38,9 @@ class MainApp(tk.Tk):
         self.model_tolerance_tab = ttk.Frame(self.notebook)
         self.quantummechanics_tab = ttk.Frame(self.notebook)
         self.mlEstimator_tab = ttk.Frame(self.notebook)
+        self.pressure_tab = ttk.Frame(self.notebook)
+        self.uncertainty_tab = ttk.Frame(self.notebook)
+        self.miscellaneous_tab = ttk.Frame(self.notebook)
 
 
         self.notebook.add(self.datasources_tab, text="Data Sources")
@@ -46,6 +52,10 @@ class MainApp(tk.Tk):
         self.notebook.add(self.model_tolerance_tab, text='modelTolerances Generator')
         self.notebook.add(self.quantummechanics_tab, text='QuantumMechanics Generator')
         self.notebook.add(self.mlEstimator_tab, text='MLEstimator Generator')
+        self.notebook.add(self.pressure_tab, text='Pressure Dependence Generator')
+        self.notebook.add(self.uncertainty_tab, text='Uncertainty Analysis Generator')
+        self.notebook.add(self.miscellaneous_tab, text='Miscellaneous Options Generator')
+
 
         self.thermo_sources = ThermoSources(self.deprecated_tab)
         self.thermo_sources.grid(row=0, column=0)
@@ -62,6 +72,9 @@ class MainApp(tk.Tk):
         self.model_tolerances_tab_label = modelTolerances(self.model_tolerance_tab)
         self.quantummechanics_tab_label = quantumMechanics(self.quantummechanics_tab)
         self.mlEstimator_tab_label = mlEstimator(self.mlEstimator_tab)
+        self.pressure_tab_label = pressureDependence(self.pressure_tab)
+        self.uncertainty_tab_label = uncertaintyAnalysis(self.uncertainty_tab)
+        self.miscellaneous_tab_label = miscellaneousOptions(self.miscellaneous_tab)
 
         tab2 = Tab2(self.notebook,self.datasource_tab_label ,self.tab1)
 
