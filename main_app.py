@@ -14,6 +14,7 @@ from pressureDependence import pressureDependence
 from uncertainty_analysis import uncertaintyAnalysis
 from miscellaneous_opts import miscellaneousOptions
 from generateSpeciesConstraint import generateSpeciesConstraint
+from RestartFromSeed import restartFromSeedMechanism
 
 class MainApp(tk.Tk):
     def __init__(self):
@@ -43,6 +44,7 @@ class MainApp(tk.Tk):
         self.uncertainty_tab = ttk.Frame(self.notebook)
         self.miscellaneous_tab = ttk.Frame(self.notebook)
         self.generate_species_constraint_tab = ttk.Frame(self.notebook)
+        self.restart_from_seed_tab = ttk.Frame(self.notebook)
 
 
         self.notebook.add(self.datasources_tab, text="Data Sources")
@@ -58,6 +60,7 @@ class MainApp(tk.Tk):
         self.notebook.add(self.uncertainty_tab, text='Uncertainty Analysis Generator')
         self.notebook.add(self.miscellaneous_tab, text='Miscellaneous Options Generator')
         self.notebook.add(self.generate_species_constraint_tab, text='Generate Species Constraint')
+        self.notebook.add(self.restart_from_seed_tab, text='Restart From Seed Mechanism')
 
 
         self.thermo_sources = ThermoSources(self.deprecated_tab)
@@ -79,7 +82,9 @@ class MainApp(tk.Tk):
         self.uncertainty_tab_label = uncertaintyAnalysis(self.uncertainty_tab)
         self.miscellaneous_tab_label = miscellaneousOptions(self.miscellaneous_tab)
         self.generate_species_constraint_tab_label = generateSpeciesConstraint(self.generate_species_constraint_tab)
-
+        self.restart_from_seed_tab_label = restartFromSeedMechanism(self.restart_from_seed_tab)
+        
+        
         tab2 = Tab2(self.notebook,self.datasource_tab_label ,self.tab1)
 
         self.notebook.add(tab2, text="Tab 2")

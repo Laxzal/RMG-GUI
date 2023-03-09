@@ -141,6 +141,12 @@ class pressureDependence(ctk.CTkFrame):
             self.PressureBasisFunctionEntry = ttk.Entry(self.frame8, textvariable=self.PressureBasisFunction)
             self.PressureBasisFunctionEntry.grid(row=0, column=1, sticky='w')
             self.PressureBasisFunctionEntry.config(validate='key', validatecommand=(self.register(self.validateInt), '%P'))
+        else:
+            # Forget the Basis Functions
+            self.TemperatureBasisFunctionLabel.grid_forget()
+            self.TemperatureBasisFunctionEntry.grid_forget()
+            self.PressureBasisFunctionLabel.grid_forget()
+            self.PressureBasisFunctionEntry.grid_forget()
 
     def validateFloat(self, P):
         if P == '':
