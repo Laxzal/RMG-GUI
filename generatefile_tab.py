@@ -2,21 +2,26 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
+import customtkinter as ctk
 
 
-class Tab2(tk.Frame):
-    def __init__(self, parent, datasource_tab, tab1):
-        super().__init__(parent)
-        self.parent = parent
+class GenerateFile(ctk.CTkFrame):
+    def __init__(self, master, datasource_tab, tab1):
+        super().__init__(master)
+        self.master = master
         
-        self.email_label = tk.Label(self, text="Enter your email:")
-        self.email_label.pack()
+        # Create Frame
+        self.frame0 = ttk.Frame(self.master)
+        self.frame0.place(relx=0.5, rely=0.5, anchor='center')
         
-        self.email_entry = tk.Entry(self)
-        self.email_entry.pack()
+        self.email_label = tk.Label(self.frame0, text="Enter your email:")
+        self.email_label.grid(row=0, column=0, sticky='w')
         
-        self.generate_button = tk.Button(self, text="Generate output file", command=self.generate_file)
-        self.generate_button.pack()
+        self.email_entry = tk.Entry(self.frame0)
+        self.email_entry.grid(row=0, column=1, sticky='w')
+        
+        self.generate_button = tk.Button(self.frame0, text="Generate output file", command=self.generate_file)
+        self.generate_button.grid(row=1, column=0, pady=10)
         self.tab1 = tab1
         self.datasource_tab = datasource_tab
         
@@ -73,5 +78,5 @@ class Tab2(tk.Frame):
                 f.write(file_content_species)
                 f.write(file_content_email)
         # show success message
-        success_label = tk.Label(self.parent, text='File saved successfully!', fg='green')
+        success_label = tk.Label(self.frame0, text='File saved successfully!', fg='green')
         success_label.grid(row=2, column=0, columnspan=2, pady=10)

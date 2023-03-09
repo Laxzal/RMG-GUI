@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from species_tab import Species as Tab1
-from tab2_dummy import Tab2 as Tab2
+from generatefile_tab import GenerateFile
 from deprecated_tab import ThermoSources, ReactionSources
 from datasource_tab import DualListBoxes
 from reactor_system import simpleReactor, liquidReactor
@@ -45,7 +45,7 @@ class MainApp(tk.Tk):
         self.miscellaneous_tab = ttk.Frame(self.notebook)
         self.generate_species_constraint_tab = ttk.Frame(self.notebook)
         self.restart_from_seed_tab = ttk.Frame(self.notebook)
-
+        self.generate_file_tab = ttk.Frame(self.notebook)
 
         self.notebook.add(self.datasources_tab, text="Data Sources")
         self.notebook.add(self.deprecated_tab, text="Deprecated")
@@ -61,7 +61,7 @@ class MainApp(tk.Tk):
         self.notebook.add(self.miscellaneous_tab, text='Miscellaneous Options Generator')
         self.notebook.add(self.generate_species_constraint_tab, text='Generate Species Constraint')
         self.notebook.add(self.restart_from_seed_tab, text='Restart From Seed Mechanism')
-
+        self.notebook.add(self.generate_file_tab, text="Generate Input File")
 
         self.thermo_sources = ThermoSources(self.deprecated_tab)
         self.thermo_sources.grid(row=0, column=0)
@@ -85,9 +85,9 @@ class MainApp(tk.Tk):
         self.restart_from_seed_tab_label = restartFromSeedMechanism(self.restart_from_seed_tab)
         
         
-        tab2 = Tab2(self.notebook,self.datasource_tab_label ,self.tab1)
+        self.generate_file_tab_label = GenerateFile(self.generate_file_tab,self.datasource_tab_label ,self.tab1)
 
-        self.notebook.add(tab2, text="Tab 2")
+
 if __name__ == "__main__":
     app = MainApp()
     app.mainloop()

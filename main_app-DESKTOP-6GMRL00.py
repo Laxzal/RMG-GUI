@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from species_tab import Species as Tab1
-from tab2_dummy import Tab2 as Tab2
+from generatefile_tab import Tab2 as Tab2
 from deprecated_tab import ThermoSources, ReactionSources
 
 class MainApp(tk.Tk):
