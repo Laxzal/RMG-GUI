@@ -37,7 +37,7 @@ class uncertaintyAnalysis(ctk.CTkFrame):
 
         # Create a tick box in gui to use uncertainty analysis
         self.use_uncertainty_analysis = tk.BooleanVar()
-        self.use_uncertainty_analysis.set(0)
+        self.use_uncertainty_analysis.set('')
         self.use_uncertainty_analysis_check = tk.Checkbutton(self.frame0, text="Use Uncertainty Analysis", variable=self.use_uncertainty_analysis)
         self.use_uncertainty_analysis_check.grid(row=0, column=0, padx=5, pady=5)
 
@@ -77,7 +77,7 @@ class uncertaintyAnalysis(ctk.CTkFrame):
         self.local_number_label = ttk.Label(self.frame5, text="Local Number")
         self.local_number_label.grid(row=0, column=0, padx=5, pady=5)
         self.local_number = tk.IntVar()
-        self.local_number.set(0)
+        self.local_number.set('')
         self.local_number_entry = ttk.Entry(self.frame5, textvariable=self.local_number)
         self.local_number_entry.grid(row=0, column=1, padx=5, pady=5)
 
@@ -85,7 +85,7 @@ class uncertaintyAnalysis(ctk.CTkFrame):
         self.global_number_label = ttk.Label(self.frame6, text="Global Number")
         self.global_number_label.grid(row=0, column=0, padx=5, pady=5)
         self.global_number = tk.IntVar()
-        self.global_number.set(0)
+        self.global_number.set('')
         self.global_number_entry = ttk.Entry(self.frame6, textvariable=self.global_number)
         self.global_number_entry.grid(row=0, column=1, padx=5, pady=5)
 
@@ -93,7 +93,7 @@ class uncertaintyAnalysis(ctk.CTkFrame):
         self.termination_time_label = ttk.Label(self.frame7, text="Termination Time")
         self.termination_time_label.grid(row=0, column=0, padx=5, pady=5)
         self.termination_time = tk.DoubleVar()
-        self.termination_time.set(0)
+        self.termination_time.set('')
         self.termination_time_entry = ttk.Entry(self.frame7, textvariable=self.termination_time)
         self.termination_time_entry.grid(row=0, column=1, padx=5, pady=5)
 
@@ -101,7 +101,7 @@ class uncertaintyAnalysis(ctk.CTkFrame):
         self.pceRunTime_label = ttk.Label(self.frame8, text="PCE Run Time")
         self.pceRunTime_label.grid(row=0, column=0, padx=5, pady=5)
         self.pceRunTime = tk.DoubleVar()
-        self.pceRunTime.set(0)
+        self.pceRunTime.set('')
         self.pceRunTime_entry = ttk.Entry(self.frame8, textvariable=self.pceRunTime)
         self.pceRunTime_entry.grid(row=0, column=1, padx=5, pady=5)
 
@@ -109,7 +109,7 @@ class uncertaintyAnalysis(ctk.CTkFrame):
         self.pceErrorTol_label = ttk.Label(self.frame9, text="PCE Error Tolerance")
         self.pceErrorTol_label.grid(row=0, column=0, padx=5, pady=5)
         self.pceErrorTol = tk.DoubleVar()
-        self.pceErrorTol.set(0)
+        self.pceErrorTol.set('')
         self.pceErrorTol_entry = ttk.Entry(self.frame9, textvariable=self.pceErrorTol)
         self.pceErrorTol_entry.grid(row=0, column=1, padx=5, pady=5)
 
@@ -117,7 +117,7 @@ class uncertaintyAnalysis(ctk.CTkFrame):
         self.pceMaxEval_label = ttk.Label(self.frame10, text="PCE Max Eval")
         self.pceMaxEval_label.grid(row=0, column=0, padx=5, pady=5)
         self.pceMaxEval = tk.IntVar()
-        self.pceMaxEval.set(0)
+        self.pceMaxEval.set('')
         self.pceMaxEval_entry = ttk.Entry(self.frame10, textvariable=self.pceMaxEval)
         self.pceMaxEval_entry.grid(row=0, column=1, padx=5, pady=5)
 
@@ -128,3 +128,36 @@ class uncertaintyAnalysis(ctk.CTkFrame):
         self.logx.set('')
         self.logx_drop = ttk.OptionMenu(self.frame11, self.logx, '', 'True', 'False')
         self.logx_drop.grid(row=0, column=1, padx=5, pady=5)
+
+    def generate_uncertainty_analysis(self):
+        
+        if self.use_uncertainty_analysis.get() == 1:
+            
+            # Get all the values from the entry boxes and drop down menus
+            self.local_analysis_drop_val = self.local_analysis.get() if self.local_analysis.get() != '' else None
+            self.global_analysis_drop_val = self.global_analysis.get() if self.global_analysis.get() != '' else None
+            self.uncorrelated_drop_val = self.uncorrelated.get() if self.uncorrelated.get() != '' else None
+            self.correlated_drop_val = self.correlated.get() if self.correlated.get() != '' else None
+            self.local_number_entry_val = self.local_number_entry.get() if self.local_number_entry.get() != '' else None
+            self.global_number_entry_val = self.global_number_entry.get() if self.global_number_entry.get() != '' else None
+            self.termination_time_entry_val = self.termination_time_entry.get() if self.termination_time_entry.get() != '' else None
+            self.pceRunTime_entry_val = self.pceRunTime_entry.get() if self.pceRunTime_entry.get() != '' else None
+            self.pceErrorTol_entry_val = self.pceErrorTol_entry.get() if self.pceErrorTol_entry.get() != '' else None
+            self.pceMaxEval_entry_val = self.pceMaxEval_entry.get() if self.pceMaxEval_entry.get() != '' else None
+            self.logx_drop_val = self.logx.get() if self.logx.get() != '' else None
+
+            # Create a dictionary of the values
+            
+            return {'localAnalysis': self.local_analysis_drop_val,
+                    'globalAnalysis': self.global_analysis_drop_val,
+                    'uncorrelated': self.uncorrelated_drop_val,
+                    'correlated': self.correlated_drop_val,
+                    'localNumber': self.local_number_entry_val,
+                    'terminationTime': self.termination_time_entry_val,
+                    'pceRunTime': self.pceRunTime_entry_val,
+                    'pcErrorTol': self.pceErrorTol_entry_val,
+                    'pceMaxEval': self.pceMaxEval_entry_val,
+                    'logx': self.logx_drop_val
+                    }
+        else:
+            return None

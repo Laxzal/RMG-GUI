@@ -11,34 +11,45 @@ class generateSpeciesConstraint(ctk.CTkFrame):
         self.master = master
 
         # Create 14 Frames
+        self.frame_specs = ttk.Frame(self.master)
+        self.frame_specs.grid(row=0, column=0, sticky='nsew')
         self.frame0 = ttk.Frame(self.master)
-        self.frame0.grid(row=0, column=0, sticky='nsew')
+        self.frame0.grid(row=1, column=0, sticky='nsew')
         self.frame1 = ttk.Frame(self.master)
-        self.frame1.grid(row=1, column=0, sticky='nsew')
+        self.frame1.grid(row=2, column=0, sticky='nsew')
         self.frame2 = ttk.Frame(self.master)
-        self.frame2.grid(row=2, column=0, sticky='nsew')
+        self.frame2.grid(row=3, column=0, sticky='nsew')
         self.frame3 = ttk.Frame(self.master)
-        self.frame3.grid(row=3, column=0, sticky='nsew')
+        self.frame3.grid(row=4, column=0, sticky='nsew')
         self.frame4 = ttk.Frame(self.master)
-        self.frame4.grid(row=4, column=0, sticky='nsew')
+        self.frame4.grid(row=5, column=0, sticky='nsew')
         self.frame5 = ttk.Frame(self.master)
-        self.frame5.grid(row=5, column=0, sticky='nsew')
+        self.frame5.grid(row=6, column=0, sticky='nsew')
         self.frame6 = ttk.Frame(self.master)
-        self.frame6.grid(row=6, column=0, sticky='nsew')
+        self.frame6.grid(row=7, column=0, sticky='nsew')
         self.frame7 = ttk.Frame(self.master)
-        self.frame7.grid(row=7, column=0, sticky='nsew')
+        self.frame7.grid(row=8, column=0, sticky='nsew')
         self.frame8 = ttk.Frame(self.master)
-        self.frame8.grid(row=8, column=0, sticky='nsew')
+        self.frame8.grid(row=9, column=0, sticky='nsew')
         self.frame9 = ttk.Frame(self.master)
-        self.frame9.grid(row=9, column=0, sticky='nsew')
+        self.frame9.grid(row=10, column=0, sticky='nsew')
         self.frame10 = ttk.Frame(self.master)
-        self.frame10.grid(row=10, column=0, sticky='nsew')
+        self.frame10.grid(row=11, column=0, sticky='nsew')
         self.frame11 = ttk.Frame(self.master)
-        self.frame11.grid(row=11, column=0, sticky='nsew')
+        self.frame11.grid(row=12, column=0, sticky='nsew')
         self.frame12 = ttk.Frame(self.master)
-        self.frame12.grid(row=12, column=0, sticky='nsew')
+        self.frame12.grid(row=13, column=0, sticky='nsew')
         self.frame13 = ttk.Frame(self.master)
-        self.frame13.grid(row=13, column=0, sticky='nsew')
+        self.frame13.grid(row=14, column=0, sticky='nsew')
+
+        # Create a checkbox to allow the user to select whether they want to generate a species constraint
+        self.generate_spec_constraints_label = ttk.Label(self.frame_specs, text='Generate Species Constraints')
+        self.generate_spec_constraints_label.grid(row=0, column=0, sticky='w')
+        self.generateSpeciesConstraint_var = tk.BooleanVar()
+        self.generateSpeciesConstraint_var.set(False)
+        self.generateSpeciesConstraint_checkbox = ttk.Checkbutton(self.frame_specs, variable=self.generateSpeciesConstraint_var)
+        self.generateSpeciesConstraint_checkbox.grid(row=0, column=1, sticky='w')
+        
 
         # Create a label called allowed with an entry box and let the user know they can use a comma to separate multiple species
         self.allowedLabel = ttk.Label(self.frame0, text='Allowed Species')
@@ -130,3 +141,47 @@ class generateSpeciesConstraint(ctk.CTkFrame):
             return True
         else:
             return False
+    
+    def generate_spec_constraints(self):
+        
+        # user selects to use spec constraints
+        if self.generateSpeciesConstraint_var.get() == 1:
+            
+            #Get all the values from the entry boxes
+            self.allowd_values = self.allowedEntry.get()
+            self.wordsplit = self.allowed_values.split(',')
+            for i in range(len(self.wordsplit)):
+                self.wordsplit[i] = "'" + self.wordsplit[i].strip() + "'"
+                
+            self.allowd_values = ','.join(self.wordsplit)
+            
+            
+            self.maximum_carbon_atoms = self.maximumCarbonAtomsEntry.get()
+            self.maximum_oxygen_atoms = self.maximumOxygenAtomsEntry.get()
+            self.maximum_nitrogen_atoms = self.maximumNitrogenAtomsEntry.get()
+            self.maximum_silicon_atoms = self.maximumSiliconAtomsEntry.get()
+            self.maximum_sulfur_atoms = self.maximumSulfurAtomsEntry.get()
+            self.maximum_heavy_atoms = self.maximumHeavyAtomsEntry.get()
+            self.maximum_surface_sites = self.maximumSurfaceSitesEntry.get()
+            self.maximum_radical_electrons = self.maximumRadicalElectronsEntry.get()
+            self.maximum_singlet_carbenes = self.maximumSingletCarbenesEntry.get()
+            self.maximum_carbene_radicals = self.maximumCarbeneRadicalsEntry.get()
+            self.maximum_isotopic_atoms = self.maximumIsotopicAtomsEntry.get()
+            self.allow_singlet_o2 = self.allowSingletO2Entry.get()
+            
+            # Create a dictionary with all the values
+            return {'allowed': self.allowd_values, 
+                    'maximumCarbonAtoms': self.maximum_carbon_atoms, 
+                    'maximumOxygenAtoms': self.maximum_oxygen_atoms, 
+                    'maximumNitrogenAtoms': self.maximum_nitrogen_atoms, 
+                    'maximumSiliconAtoms': self.maximum_silicon_atoms, 
+                    'maximumSulfurAtoms': self.maximum_sulfur_atoms, 
+                    'maximumHeavyAtoms': self.maximum_heavy_atoms, 
+                    'maximumSurfaceSites': self.maximum_surface_sites, 
+                    'maximumRadicalElectrons': self.maximum_radical_electrons, 
+                    'maximumSingletCarbenes': self.maximum_singlet_carbenes, 
+                    'maximumCarbeneRadicals': self.maximum_carbene_radicals, 
+                    'maximumIsotopicAtoms': self.maximum_isotopic_atoms, 
+                    'allowSingletO2': self.allow_singlet_o2}
+        else:
+            return None

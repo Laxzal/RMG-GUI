@@ -7,7 +7,9 @@ import customtkinter as ctk
 
 class GenerateFile(ctk.CTkFrame):
     def __init__(self, master, datasource_tab = None, species_tab=None, reactors_tab= None, liquid_tab = None,
-                 simulatortol_tab = None, model_tab = None, options_tab = None, pdep_tab = None):
+                 simulatortol_tab = None, model_tab = None, options_tab = None, pdep_tab = None, generate_species_constraint_tab = None,
+                 quantummechanics_tab = None, mlEstimator_tab = None, uncertainty_tab = None,
+                 restart_from_seed_tab = None):
         super().__init__(master)
         self.master = master
         
@@ -31,6 +33,13 @@ class GenerateFile(ctk.CTkFrame):
         self.model_tab = model_tab
         self.options_tab = options_tab
         self.pdep_tab = pdep_tab
+        self.generate_species_constraint_tab = generate_species_constraint_tab
+        self.quantummechanics_tab = quantummechanics_tab
+        self.mlEstimator_tab = mlEstimator_tab
+        self.uncertainty_tab = uncertainty_tab
+        self.restart_from_seed_tab = restart_from_seed_tab
+        
+        
     def email_noinput_error(self):
         if not self.email_entry.get():
             messagebox.showerror("Error", "Please enter your email address")
@@ -368,12 +377,201 @@ class GenerateFile(ctk.CTkFrame):
             file_content_pdep += ")\n\t"
             
             # generated species constraints
-            
+        self.species_constraints_dict = self.generate_species_constraint_tab.generate_spec_constraints()
+        file_content_species_constraints = None
+        
+        if self.species_constraints_dict is not None:
+            file_content_species_constraints = f"generatedSpeciesConstraints(\n\t"
+            for key, value in self.species_constraints_dict.items():
+                if key == 'allowed':
+                    if value is not None:
+                        file_content_species_constraints += f"allowed=['{value}'],\n\t"
+                if key == 'maximumCarbonAtoms':
+                    if value is not None:
+                        file_content_species_constraints += f"maximumCarbonAtoms={value},\n\t"
+                if key == 'maximumOxygenAtoms':
+                    if value is not None:
+                        file_content_species_constraints += f"maximumOxygenAtoms={value},\n\t"
+                if key == 'maximumNitrogenAtoms':
+                    if value is not None:
+                        file_content_species_constraints += f"maximumNitrogenAtoms={value},\n\t"
+                if key == 'maximumSiliconAtoms':
+                    if value is not None:
+                        file_content_species_constraints += f"maximumSiliconAtoms={value},\n\t"
+                if key == 'maximumSulfurAtoms':
+                    if value is not None:
+                        file_content_species_constraints += f"maximumSulfurAtoms={value},\n\t"
+                if key == 'maximumHeavyAtoms':
+                    if value is not None:
+                        file_content_species_constraints += f"maximumHeavyAtoms={value},\n\t"
+                if key == 'maximumRadicalElectrons':
+                    if value is not None:
+                        file_content_species_constraints += f"maximumRadicalElectrons={value},\n\t"
+                if key == 'maximumSingletCarbenes':
+                    if value is not None:
+                        file_content_species_constraints += f"maximumSingletCarbenes={value},\n\t"
+                if key == 'maximumCarbeneRadicals':
+                    if value is not None:
+                        file_content_species_constraints += f"maximumCarbeneRadicals={value},\n\t"
+                if key == 'maximumIsotopicAtoms':
+                    if value is not None:
+                        file_content_species_constraints += f"maximumIsotopicAtoms={value},\n\t"
+                if key == 'allowSingletO2':
+                    if value is not None:
+                        file_content_species_constraints += f"allowSingletO2={value},\n\t"
+            file_content_species_constraints += ")\n\t"
             # Quantum Mechanics
+        self.quantum_mechanics_dict = self.quantummechanics_tab.generate_qmech()
+        file_content_qmech = None
+        
+        if self.quantum_mechanics_dict is not None:
+            file_content_qmech = f"quantumMechanics(\n\t"
+            for key, value in self.quantum_mechanics_dict.items():
+                if key == 'software':
+                    if value is not None:
+                        file_content_qmech += f"software='{value}',\n\t"
+                if key == 'method':
+                    if value is not None:
+                        file_content_qmech += f"method='{value}',\n\t"
+                if key == 'fileStore':
+                    if value is not None:
+                        file_content_qmech += f"fileStore='{value}',\n\t"
+                if key == 'scratchDirectory':
+                    if value is not None:
+                        file_content_qmech += f"scratchDirectory='{value}',\n\t"
+                if key == 'onlyCyclics':
+                    if value is not None:
+                        file_content_qmech += f"onlyCyclics={value},\n\t"
+                if key == 'maxRadicalNumber':
+                    if value is not None:
+                        file_content_qmech += f"maxRadicalNumber={value},\n\t"
+            file_content_qmech += ")\n\t"
+            
             
             # ml Estimator
+        self.ml_estimator_dict = self.mlEstimator_tab.generate_mlestimator()
+        file_content_mlestimator = None
+        
+        if self.ml_estimator_dict is not None:
+            file_content_mlestimator = f"mlEstimator(\n\t"
+            for key, value in self.ml_estimator_dict.items():
+                if key == 'thermo':
+                    if value is not None:
+                        file_content_mlestimator += f"thermo={value},\n\t"
+                if key == 'name':
+                    if value is not None:
+                        file_content_mlestimator += f"name='{value}',\n\t"
+                if key == 'minHeavyAtoms':
+                    if value is not None:
+                        file_content_mlestimator += f"minHeavyAtoms={value},\n\t"
+                if key == 'maxHeavyAtoms':
+                    if value is not None:
+                        file_content_mlestimator += f"maxHeavyAtoms={value},\n\t"
+                if key == 'minCarbonAtoms':
+                    if value is not None:
+                        file_content_mlestimator += f"minCarbonAtoms={value},\n\t"
+                if key == 'maxCarbonAtoms':
+                    if value is not None:
+                        file_content_mlestimator += f"maxCarbonAtoms={value},\n\t"
+                if key == 'minOxygenAtoms':
+                    if value is not None:
+                        file_content_mlestimator += f"minOxygenAtoms={value},\n\t"
+                if key == 'maxOxygenAtoms':
+                    if value is not None:
+                        file_content_mlestimator += f"maxOxygenAtoms={value},\n\t"
+                if key == 'minNitrogenAtoms':
+                    if value is not None:
+                        file_content_mlestimator += f"minNitrogenAtoms={value},\n\t"
+                if key == 'maxNitrogenAtoms':
+                    if value is not None:
+                        file_content_mlestimator += f"maxNitrogenAtoms={value},\n\t"
+                if key == 'onlyCyclics':
+                    if value is not None:
+                        file_content_mlestimator += f"onlyCyclics={value},\n\t"
+                if key == 'onlyHeterocyclics':
+                    if value is not None:
+                        file_content_mlestimator += f"onlyHeterocyclics={value},\n\t"
+                if key == 'minCycleOverlap':
+                    if value is not None:
+                        file_content_mlestimator += f"minCycleOverlap={value},\n\t"
+                if key == 'H298UncertaintyCutOff':
+                    if value is not None:
+                        file_content_mlestimator += f"H298UncertaintyCutOff=({value},'kcal/mol'),\n\t"
+                if key == 'S298UncertaintyCutOff':
+                    if value is not None:
+                        file_content_mlestimator += f"S298UncertaintyCutoff=({value},'cal/(mol*k)'),\n\t"
+                if key == 'CpUncertaintyCutOff':
+                    if value is not None:
+                        file_content_mlestimator += f"CpUncertaintyCutoff=({value},'cal/(mol*k)'),\n\t"
+            file_content_mlestimator += ")\n\t"
             
             
+            # uncertainty
+        self.uncertainty_dict = self.uncertainty_tab.generate_uncertainty_analysis()
+        file_content_uncertainty = None
+        
+        if self.uncertainty_dict is not None:
+            file_content_uncertainty = f"uncertainty(\n\t"
+            for key, value in self.uncertainty_dict.items():
+                if key == 'localAnalysis':
+                    if value is not None:
+                        file_content_uncertainty += f"localAnalysis={value},\n\t"
+                if key == 'globalAnalysis':
+                    if value is not None:
+                        file_content_uncertainty += f"globalAnalysis={value},\n\t"
+                if key == 'correlated':
+                    if value is not None:
+                        file_content_uncertainty += f"correlated={value},\n\t"
+                if key == 'uncorrelated':
+                    if value is not None:
+                        file_content_uncertainty += f"uncorrelated={value},\n\t"
+                if key == 'localNumber':
+                    if value is not None:
+                        file_content_uncertainty += f"localNumber={value},\n\t"
+                if key == 'globalNumber':
+                    if value is not None:
+                        file_content_uncertainty += f"globalNumber={value},\n\t"
+                if key == 'terminationTime':
+                    if value is not None:
+                        file_content_uncertainty += f"terminationTime=({value},'s'),\n\t"
+                if key == 'pceRunTime':
+                    if value is not None:
+                        file_content_uncertainty += f"pceRunTime=({value},'s'),\n\t"
+                if key == 'pceErrorTol':
+                    if value is not None:
+                        file_content_uncertainty += f"pceErrorTol={value},\n\t"
+                if key == 'pceMaxEvals':
+                    if value is not None:
+                        file_content_uncertainty += f"pceMaxEvals={value},\n\t"
+                if key == 'logx':
+                    if value is not None:
+                        file_content_uncertainty += f"logx={value},\n\t"
+            file_content_uncertainty += ")\n\t"
+                    
+            
+            # restart from seed
+        self.restart_dict = self.restart_from_seed_tab.generate_start_seed()
+        file_content_restart = None
+        
+        if self.restart_dict is not None:
+            file_content_restart = f"restartFromSeed(\n\t"
+            for key, value in self.restart_dict.items():
+                if key == 'path':
+                    if value is not None:
+                        file_content_restart += f"path='{value}',\n\t"
+                if key == 'coreSeed':
+                    if value is not None:
+                        file_content_restart += f"coreSeed={value},\n\t"
+                if key == 'edgeSeed':
+                    if value is not None:
+                        file_content_restart += f"edgeSeed={value},\n\t"
+                if key == 'filters':
+                    if value is not None:
+                        file_content_restart += f"filters={value},\n\t"
+                if key == 'speciesMap':
+                    if value is not None:
+                        file_content_restart += f"speciesMap={value},\n\t"
+            file_content_restart += ")\n\t"            
             
             
             
@@ -414,6 +612,21 @@ class GenerateFile(ctk.CTkFrame):
                 f.write("""\n\n""")
             if file_content_pdep:
                 f.write(file_content_pdep)
+                f.write("""\n\n""")
+            if file_content_species_constraints:
+                f.write(file_content_species_constraints)
+                f.write("""\n\n""")
+            if file_content_qmech:
+                f.write(file_content_qmech)
+                f.write("""\n\n""")
+            if file_content_mlestimator:
+                f.write(file_content_mlestimator)
+                f.write("""\n\n""")
+            if file_content_uncertainty:
+                f.write(file_content_uncertainty)
+                f.write("""\n\n""")
+            if file_content_restart:
+                f.write(file_content_restart)
                 f.write("""\n\n""")
             f.write(file_content_email)
         # show success message

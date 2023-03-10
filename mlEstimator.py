@@ -216,3 +216,46 @@ class mlEstimator(ctk.CTkFrame):
             return True
         except ValueError:
             return False
+
+    def generate_mlestimator(self):
+        
+        if self.useMlEstimator.get() == 1:
+
+            # Get all the values from the entry boxes
+            self.thermo_val = self.thermoDropDown.get() if self.thermoDropDown.get() != '' else None
+            self.name_val = self.name.get() if self.name.get() != '' else None
+            self.minHeavyAtoms_val = self.minHeavyAtoms.get() if self.minHeavyAtoms.get() != '' else None
+            self.maxHeavyAtoms_val = self.maxHeavyAtoms.get() if self.maxHeavyAtoms.get() != '' else None
+            self.minCarbonAtoms_val = self.minCarbonAtoms.get() if self.minCarbonAtoms.get() != '' else None
+            self.maxCarbonAtoms_val = self.maxCarbonAtoms.get() if self.maxCarbonAtoms.get() != '' else None
+            self.minOxygenAtoms_val = self.minOxygenAtoms.get() if self.minOxygenAtoms.get() != '' else None
+            self.maxOxygenAtoms_val = self.maxOxygenAtoms.get() if self.maxOxygenAtoms.get() != '' else None
+            self.minNitrogenAtoms_val = self.minNitrogenAtoms.get() if self.minNitrogenAtoms.get() != '' else None
+            self.maxNitrogenAtoms_val = self.maxNitrogenAtoms.get() if self.maxNitrogenAtoms.get() != '' else None
+            self.onlyCyclics_val = self.onlyCyclicsEntry.get() if self.onlyCyclicsEntry.get() != '' else None
+            self.onlyHeterocyclics_val = self.onlyHeterocyclicsEntry.get() if self.onlyHeterocyclicsEntry.get() != '' else None
+            self.minCycleOverlap_val = self.minCycleOverlapEntry.get() if self.minCycleOverlapEntry.get() != '' else None
+            self.H298UncertaintyCutOffEntry_val = self.H298UncertaintyCutOffEntry.get() if self.H298UncertaintyCutOffEntry.get() != '' else None
+            self.S298UncertaintyCutOffEntry_val = self.S298UncertaintyCutOffEntry.get() if self.S298UncertaintyCutOffEntry.get() != '' else None
+            self.CpUncertaintyCutOffEntry_val = self.CpUncertaintyCutOffEntry.get() if self.CpUncertaintyCutOffEntry.get() != '' else None
+            
+            # Create a dictionary of all the values
+            return {'thermo': self.thermo_val, 
+                    'name': self.name_val, 
+                    'minHeavyAtoms': self.minHeavyAtoms_val, 
+                    'maxHeavyAtoms': self.maxHeavyAtoms_val, 
+                    'minCarbonAtoms': self.minCarbonAtoms_val, 
+                    'maxCarbonAtoms': self.maxCarbonAtoms_val, 
+                    'minOxygenAtoms': self.minOxygenAtoms_val, 
+                    'maxOxygenAtoms': self.maxOxygenAtoms_val, 
+                    'minNitrogenAtoms': self.minNitrogenAtoms_val, 
+                    'maxNitrogenAtoms': self.maxNitrogenAtoms_val, 
+                    'onlyCyclics': self.onlyCyclics_val, 
+                    'onlyHeterocyclics': self.onlyHeterocyclics_val, 
+                    'minCycleOverlap': self.minCycleOverlap_val, 
+                    'H298UncertaintyCutOff': self.H298UncertaintyCutOffEntry_val, 
+                    'S298UncertaintyCutOff': self.S298UncertaintyCutOffEntry_val, 
+                    'CpUncertaintyCutOff': self.CpUncertaintyCutOffEntry_val}
+        
+        else:
+            return None

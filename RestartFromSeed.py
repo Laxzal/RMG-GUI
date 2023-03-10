@@ -91,3 +91,24 @@ class restartFromSeedMechanism(ctk.CTkFrame):
     def get_species_map_path(self, event=None):
         self.filename = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("yml files","*.yml"),("all files","*.*")))
         event.insert(0, self.filename)
+        
+    def generate_start_seed(self):
+        
+        if self.restart_seed_var.get() == 1:
+            if self.path_entry.get() != '':
+               self.path_val = self.path_entry.get()
+               
+               return {'path': self.path_val}
+            elif self.path_entry.get() == '':
+                self.path_val = None
+                self.coreseed_val = self.coreseed_entry.get()
+                self.edge_speed_val = self.edge_speed_entry.get()
+                self.filters_val = self.filters_entry.get()
+                self.species_map_val = self.species_map_entry.get()
+                return {'path': self.path_val, 'coreseed': self.coreseed_val, 
+                        'edge_speed': self.edge_speed_val, 
+                        'filters': self.filters_val, 
+                        'species_map': self.species_map_val}
+        elif self.restart_seed_var.get() == 0:
+            return None
+            

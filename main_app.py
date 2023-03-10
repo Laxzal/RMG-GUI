@@ -95,7 +95,12 @@ class MainApp(tk.Tk):
                                                     simulatortol_tab = self.simulator_tolerances_tab_label,
                                                     model_tab= self.model_tolerances_tab_label,
                                                     options_tab= self.miscellaneous_tab_label,
-                                                    pdep_tab= self.pressure_tab_label)
+                                                    pdep_tab= self.pressure_tab_label,
+                                                    generate_species_constraint_tab= self.generate_species_constraint_tab_label,
+                                                    quantummechanics_tab= self.quantummechanics_tab_label,
+                                                    mlEstimator_tab= self.mlEstimator_tab_label,
+                                                    uncertainty_tab= self.uncertainty_tab_label,
+                                                    restart_from_seed_tab= self.restart_from_seed_tab_label)
 
 
 if __name__ == "__main__":

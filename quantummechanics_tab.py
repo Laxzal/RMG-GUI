@@ -78,3 +78,24 @@ class quantumMechanics(ctk.CTkFrame):
         self.folder_store_entry.insert(0, self.foldername)
         #self.filename = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("all files","*.*"),("jpeg files","*.jpg")))
         #self.file_store_entry.insert(0, self.filename)
+    
+    def generate_qmech(self):
+        
+        if self.use_quantum_mechanics.get() == 1:
+            # Get all the values
+            self.software_value = self.software_entry.get()
+            self.method_value = self.method_entry.get()
+            self.file_store_value = self.file_store_entry.get()
+            self.scratch_dictory_value = self.folder_store_entry.get()
+            self.only_cyclics_value = self.only_cyclics_dropdown.get()
+            self.max_radical_number_value = self.max_radical_number_entry.get()
+            
+            # Return a dictionary with all the values
+            return {'software': self.software_value, 
+                    'method': self.method_value, 
+                    'fileStore': self.file_store_value, 
+                    'scratchDirectory': self.scratch_dictory_value, 
+                    'onlyCyclics': self.only_cyclics_value, 
+                    'maxRadicalNumber': self.max_radical_number_value}
+        else:
+            return None
