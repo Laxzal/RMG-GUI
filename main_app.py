@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from species_tab import Species as Tab1
+from species_tab import Species
 from generatefile_tab import GenerateFile
 from deprecated_tab import ThermoSources, ReactionSources
 from datasource_tab import DualListBoxes
@@ -71,9 +71,9 @@ class MainApp(tk.Tk):
         
         self.datasource_tab_label = DualListBoxes(self.datasources_tab)
         self.datasource_tab_label.pack(fill='both', expand=True)
-        self.tab1 = Tab1(self.species_tab)
-        self.reactors_tab_label = simpleReactor(self.reactors_tab, self.tab1)
-        self.liqduid_reactor_tab_label = liquidReactor(self.liquid_reactor_tab, self.tab1)
+        self.species_tab_label = Species(self.species_tab)
+        self.reactors_tab_label = simpleReactor(self.reactors_tab, self.species_tab_label)
+        self.liqduid_reactor_tab_label = liquidReactor(self.liquid_reactor_tab, self.species_tab_label)
         self.simulator_tolerances_tab_label = simulatorTolerances(self.simulator_tolerances_tab)
         self.model_tolerances_tab_label = modelTolerances(self.model_tolerance_tab)
         self.quantummechanics_tab_label = quantumMechanics(self.quantummechanics_tab)
@@ -85,7 +85,10 @@ class MainApp(tk.Tk):
         self.restart_from_seed_tab_label = restartFromSeedMechanism(self.restart_from_seed_tab)
         
         
-        self.generate_file_tab_label = GenerateFile(self.generate_file_tab,self.datasource_tab_label ,self.tab1)
+        self.generate_file_tab_label = GenerateFile(self.generate_file_tab,
+                                                    datasource_tab= self.datasource_tab_label,
+                                                    species_tab= self.species_tab_label,
+                                                    reactors_tab= self.reactors_tab_label)
 
 
 if __name__ == "__main__":

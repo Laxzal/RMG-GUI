@@ -115,7 +115,7 @@ class simpleReactor(ctk.CTkFrame):
         
         self.list_of_species = []
         self.species = []
-
+        self.list_of_species_terminateConversion = []
 
     def generate_species(self):
         self.species = self.species_tab.generate_field_reactor()
@@ -129,6 +129,10 @@ class simpleReactor(ctk.CTkFrame):
             self.moleFrac_label.grid(row=i+5, column=2, padx=5, pady=5, sticky='nswe')
             self.moleFrac_entry = ttk.Entry(self.frame0, width=10)
             self.moleFrac_entry.grid(row=i+5, column=3, padx=5, pady=5, sticky='nswe')
+            
+            self.list_of_species.append(self.moleFrac_label)
+            self.list_of_species.append(species[0])
+            self.list_of_species.append(self.moleFrac_entry)
     
     def show_terminateConversion(self):
         if self.terminateConversion_var.get() == 1:
@@ -136,24 +140,28 @@ class simpleReactor(ctk.CTkFrame):
             self.terminateConversion_check.grid(row=1, column=8, padx=5, pady=5, sticky='nswe')
             self.generate_terminateConversion()
         else:
-            if self.list_of_species:
-                for widget in self.list_of_species:
-                    widget.grid_forget()
-            self.moleFrac_label.grid_forget()
-            self.moleFrac_entry.grid_forget()
+            if self.list_of_species_terminateConversion != []:
+                for widget in self.list_of_species_terminateConversion:
+                    try:
+                        widget.grid_forget()
+                    except AttributeError:
+                        continue
+            self.moleFrac_label_terminateConversion.grid_forget()
+            self.moleFrac_entry_terminateConversion.grid_forget()
 
     def generate_terminateConversion(self):
         self.species = self.species_tab.generate_field_reactor()
         
         
         for i, species in enumerate(self.species):
-            self.moleFrac_label = ttk.Combobox(self.frame_terminate, textvariable=species, values=self.species)
-            self.moleFrac_label.grid(row=i+2, column=8, padx=5, pady=5, sticky='nswe')
-            self.moleFrac_entry = ttk.Entry(self.frame_terminate, width=10)
-            self.moleFrac_entry.grid(row=i+2, column=9, padx=5, pady=5, sticky='nswe')
+            self.moleFrac_label_terminateConversion = ttk.Combobox(self.frame_terminate, textvariable=species, values=self.species)
+            self.moleFrac_label_terminateConversion.grid(row=i+2, column=8, padx=5, pady=5, sticky='nswe')
+            self.moleFrac_entry_terminateConversion = ttk.Entry(self.frame_terminate, width=10)
+            self.moleFrac_entry_terminateConversion.grid(row=i+2, column=9, padx=5, pady=5, sticky='nswe')
 
-            self.list_of_species.append(self.moleFrac_label)
-            self.list_of_species.append(self.moleFrac_entry)
+            self.list_of_species_terminateConversion.append(self.moleFrac_label_terminateConversion)
+            self.list_of_species_terminateConversion.append(species[0])
+            self.list_of_species_terminateConversion.append(self.moleFrac_entry_terminateConversion)
     
     def show_terminateTime(self):
         if self.terminateTime_var.get() == 1:
@@ -207,6 +215,84 @@ class simpleReactor(ctk.CTkFrame):
         for i in self.sensitivity_right_listbox.curselection():
             self.sensitivity_left_listbox.insert(tk.END, self.sensitivity_right_listbox.get(i))
             self.sensitivity_right_listbox.delete(i)
+            
+    def generate_simplereactor(self):
+        
+        if self.reactor_var.get() == 0:
+            return None
+        elif self.reactor_var.get() == 1:
+            #Get all the required information from the entry fields
+            
+            # First check if the user has provided temperature as a range or only one entry
+            self.temp_entry_start = self.temp_entry1.get()
+            self.temp_entry_end = self.temp_entry2.get() if self.temp_entry2.get() else None
+            
+            # Check if the user has provided pressure as a range or only one entry
+            self.pressure_entry_start = self.pressure_entry1.get()
+            self.pressure_entry_end = self.pressure_entry2.get() if self.pressure_entry2.get() else None
+            
+            # Get the mol fractions of the species
+            self.mol_frac_species_dict = {}
+            if self.list_of_species != []:
+                for i in range(0,len(self.list_of_species), 3):
+                    # print(i)
+                    # print(self.list_of_species)
+                    # print(self.list_of_species[i], self.list_of_species[i+1].get())
+                    self.mol_frac_species_dict[self.list_of_species[i+1]] = self.list_of_species[i+2].get()
+                
+            else :
+                self.mol_frac_species_dict = None
+            # Get nSims
+            self.nSims_entry_value = self.nSims_entry.get() if self.nSims_entry.get() else None
+            
+            # Get terminate conversion of species
+            if self.terminateConversion_var.get() == 1:
+                self.terminateconversion_dict = {}
+                for i in range(0,len(self.list_of_species_terminateConversion), 3):
+                    if self.list_of_species_terminateConversion[i+2].get() and self.list_of_species_terminateConversion[i+2].get() != '0' and self.list_of_species_terminateConversion[i+2].get() != '0.0' and self.list_of_species_terminateConversion[i+1] != '{}':
+                        self.terminateconversion_dict[self.list_of_species_terminateConversion[i+1]] = self.list_of_species_terminateConversion[i+2].get()
+            else:
+                self.terminateconversion_dict = None
+            # Get terminate time
+            if self.terminateTime_var.get() == 1:
+                self.terminatetime_value = self.terminateTime_true_entry.get()
+            else:
+                self.terminatetime_value = None
+                
+            # Get terminate rate
+            if self.terminateRate_var.get() == 1:
+                self.terminaterate_value = self.terminaterate_true_entry.get()
+            else:
+                self.terminaterate_value = None
+            
+            # Get sensitivity
+            if self.sensitivity_var.get() == 1:
+                self.sensitivity_list = []
+                for i in range(self.sensitivity_right_listbox.size()):
+                    self.sensitivity_list.append(self.sensitivity_right_listbox.get(i))
+            else:
+                self.sensitivity_list = None
+                
+            # Get sensitivity threshold
+            if self.sensitivity_threshold_entry.get():
+                self.sensitivitythreshold_value = self.sensitivity_threshold_entry.get()
+            else:
+                self.sensitivitythreshold_value = None
+                
+                
+            
+            # return everything as a dictionary
+            return {'temperature': (self.temp_entry_start, self.temp_entry_end),
+                    'pressure': (self.pressure_entry_start, self.pressure_entry_end),
+                    'initialMoleFractions': self.mol_frac_species_dict,
+                    'nSims': self.nSims_entry_value,
+                    'terminationConversion': self.terminateconversion_dict,
+                    'terminationTime': self.terminatetime_value,
+                    'terminationRate': self.terminaterate_value,
+                    'sensitivity': self.sensitivity_list,
+                    'sensitivityThreshold': self.sensitivitythreshold_value}
+   
+            
 
 class liquidReactor(ctk.CTkFrame):
 
@@ -329,3 +415,5 @@ class liquidReactor(ctk.CTkFrame):
         else:
             self.terminatetime_true_label.grid_forget()
             self.terminateTime_true_entry.grid_forget()
+            
+    
