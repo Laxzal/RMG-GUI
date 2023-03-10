@@ -48,17 +48,17 @@ class pressureDependence(ctk.CTkFrame):
         # Create a label called maximumGrainSize and a measurement of kcal/mol and just entry box to enter that allows float only
         self.maximumGrainSize_label = tk.Label(self.frame2, text='Maximum Grain Size (kcal/mol):')
         self.maximumGrainSize_label.grid(row=0, column=0, padx=5, pady=5, sticky='e')
-        self.maximumGrainSize = tk.Entry(self.frame2, width=10)
-        self.maximumGrainSize.grid(row=0, column=1, padx=5, pady=5, sticky='w')
-        self.maximumGrainSize.config(validate='key', validatecommand=(self.register(self.validateFloat), '%P'))
+        self.maximumGrainSizeEntry = tk.Entry(self.frame2, width=10)
+        self.maximumGrainSizeEntry.grid(row=0, column=1, padx=5, pady=5, sticky='w')
+        self.maximumGrainSizeEntry.config(validate='key', validatecommand=(self.register(self.validateFloat), '%P'))
 
 
         # Create a label for minimumNumberOfGrains and an entry box that allows only float
         self.minimumNumberOfGrains_label = tk.Label(self.frame3, text='Minimum Number of Grains:')
         self.minimumNumberOfGrains_label.grid(row=0, column=0, padx=5, pady=5, sticky='e')
-        self.minimumNumberOfGrains = tk.Entry(self.frame3, width=10)
-        self.minimumNumberOfGrains.grid(row=0, column=1, padx=5, pady=5, sticky='w')
-        self.minimumNumberOfGrains.config(validate='key', validatecommand=(self.register(self.validateFloat), '%P'))
+        self.minimumGrainSizeEntry = tk.Entry(self.frame3, width=10)
+        self.minimumGrainSizeEntry.grid(row=0, column=1, padx=5, pady=5, sticky='w')
+        self.minimumGrainSizeEntry.config(validate='key', validatecommand=(self.register(self.validateFloat), '%P'))
 
         # Create a lable for temperatures that has two entry boxes to represent the range of temperatures and a separator between them and then another label for temp measurement and an entry box for the measurement and another label that says step size and an entry box to represent the step size that only allows integer positive numbers
         self.temperatures_label = tk.Label(self.frame4, text='Temperatures:')
@@ -73,8 +73,8 @@ class pressureDependence(ctk.CTkFrame):
         self.temperatures2.config(validate='key', validatecommand=(self.register(self.validateFloat), '%P'))
         self.temperatures_measurement = tk.Label(self.frame4, text='Measurement:')
         self.temperatures_measurement.grid(row=0, column=4, padx=5, pady=5, sticky='e')
-        self.temperatures_step_size = tk.Entry(self.frame4, width=10)
-        self.temperatures_step_size.grid(row=0, column=5, padx=5, pady=5, sticky='w')
+        self.temperatures_measurement_entry = tk.Entry(self.frame4, width=10)
+        self.temperatures_measurement_entry.grid(row=0, column=5, padx=5, pady=5, sticky='w')
         #self.temperatures_step_size.config(validate='key', validatecommand=(self.register(self.validateFloat), '%P'))
         self.temperatures_step_size_label = tk.Label(self.frame4, text='Step Size:')
         self.temperatures_step_size_label.grid(row=0, column=6, padx=5, pady=5, sticky='e')
@@ -143,11 +143,14 @@ class pressureDependence(ctk.CTkFrame):
             self.PressureBasisFunctionEntry.config(validate='key', validatecommand=(self.register(self.validateInt), '%P'))
         else:
             # Forget the Basis Functions
-            self.TemperatureBasisFunctionLabel.grid_forget()
-            self.TemperatureBasisFunctionEntry.grid_forget()
-            self.PressureBasisFunctionLabel.grid_forget()
-            self.PressureBasisFunctionEntry.grid_forget()
-
+            try:
+                self.TemperatureBasisFunctionLabel.grid_forget()
+                self.TemperatureBasisFunctionEntry.grid_forget()
+                self.PressureBasisFunctionLabel.grid_forget()
+                self.PressureBasisFunctionEntry.grid_forget()
+            except AttributeError:
+                pass
+            
     def validateFloat(self, P):
         if P == '':
             return True
@@ -167,3 +170,51 @@ class pressureDependence(ctk.CTkFrame):
             return True
         except ValueError:
             return False
+        
+    def generate_pdep(self):
+        
+        # If user has selected to use pdep
+        if self.use_pressure_dependence.get() == 1:
+            # If user has selected to use Chebyshev
+            if self.interpolationEntry.get() == 'Chebyshev':
+                self.pdep_inter = '(Chebyshev,' + str(self.TemperatureBasisFunction.get()) + ',' + str(self.PressureBasisFunction.get()) + ')'
+            # If user has selected to use PDepArrhenius
+            elif self.interpolation.get() == 'PDepArrhenius':
+                self.pdep_inter = 'PDepArrhenius'
+            
+            #Get temperature ranges
+            self.temperatures_1 = self.temperatures.get()
+            self.temperatures_2 = self.temperatures2.get()
+            self.temperatures_measurement = self.temperatures_measurement_entry.get()
+            self.temperatures_step_size = self.temperatures_step_size_entry.get()
+            
+            # Get pressure ranges
+            self.pressures_1 = self.pressures.get()
+            self.pressures_2 = self.pressures2.get()
+            self.pressures_measurement = self.pressures_measurement_entry.get()
+            self.pressures_step_size = self.pressures_step_size.get()
+            
+            # Get method
+            self.method = self.pressure_dependence_type.get() 
+            
+            # get maximum grain size
+            self.maximumGrainSize = self.maximumGrainSizeEntry.get() if self.maximumGrainSizeEntry.get() != '' else None
+            
+            # get minimum grain size 
+            self.minimumGrainSize = self.minimumGrainSizeEntry.get() if self.minimumGrainSizeEntry.get() != '' else None
+            
+            # get maximum atoms
+            self.maximumAtoms = self.maximumAtomsEntry.get() if self.maximumAtomsEntry.get() != '' else None
+            
+            # Return all values in a dictionary
+            return {'method': self.method,
+                    'maximumGrainSize': self.maximumGrainSize,
+                    'minimumGrainSize': self.minimumGrainSize, 
+                    'temperatures': (self.temperatures_1,self.temperatures_2,self.temperatures_measurement, self.temperatures_step_size), 
+                    'pressures': (self.pressures_1,self.pressures_2, self.pressures_measurement, self.pressures_step_size),
+                    'maximumAtoms': self.maximumAtoms, 
+                    'interpolation': self.pdep_inter}
+        else:
+            return None
+            
+            

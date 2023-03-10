@@ -42,6 +42,10 @@ class modelTolerances(tk.Frame):
         self.frame_load.grid(row=0, column=1, sticky='nsew')
         self.frame14 = ttk.Frame(self.master)
         self.frame14.grid(row=8, column=0, sticky='nsew')
+        self.frame15 = ttk.Frame(self.master)
+        self.frame15.grid(row=8, column=1, sticky='nsew')
+        self.frame16 = ttk.Frame(self.master)
+        self.frame16.grid(row=9, column=0, sticky='nsew')
 
 
 
@@ -138,6 +142,22 @@ class modelTolerances(tk.Frame):
         self.toleranceMoveEdgeReactionToSurface_label.grid(row=0, column=0, padx=5, pady=5, sticky='e')
         self.toleranceMoveEdgeReactionToSurface_entry = tk.Entry(self.frame14, width=10)
         self.toleranceMoveEdgeReactionToSurface_entry.grid(row=0, column=1, padx=5, pady=5, sticky='e')
+        
+        # Create filterReactions label and true or false list
+        self.filter_reactions_label = tk.Label(self.frame15, text='filterReactions:')
+        self.filter_reactions_label.grid(row=0, column=0, padx=5, pady=5, sticky='e')
+        self.filter_reactions_list = ['True', 'False']
+        self.filter_reactions = tk.StringVar()
+        self.filter_reactions.set(self.filter_reactions_list[1])
+        self.filter_reactions_menu = tk.OptionMenu(self.frame15, self.filter_reactions, *self.filter_reactions_list)
+        self.filter_reactions_menu.grid(row=0, column=1, padx=5, pady=5, sticky='e')
+        
+        # Create filterThreshold label and entry
+        self.filterThreshold_label = tk.Label(self.frame16, text='filterThreshold:')
+        self.filterThreshold_label.grid(row=0, column=0, padx=5, pady=5, sticky='e')
+        self.filterThreshold_entry = tk.Entry(self.frame16, width=10)
+        self.filterThreshold_entry.grid(row=0, column=1, padx=5, pady=5, sticky='e')
+        
 
         # Create a dropdown menu for preloaded settings
         self.preloadedSettings_label = tk.Label(self.frame_load, text='Preloaded Settings:')
@@ -173,6 +193,10 @@ class modelTolerances(tk.Frame):
         self.toleranceMoveSurfaceReactionToCore_entry.delete(0, 'end')
         self.toleranceMovetoCore_entry.delete(0, 'end')
         self.minSpeciesExistIterationsForPrune_entry.delete(0, 'end')
+        self.toleranceThermoKeepSpeciesInEdge_entry.delete(0, 'end')
+        self.toleranceMoveEdgeReactionToSurface_entry.delete(0, 'end')
+        self.filter_reactions.set(self.filter_reactions_list[1])
+        self.filterThreshold_entry.delete(0, 'end')
         
 
     def load_preloaded_settings(self, events=None):
@@ -183,6 +207,8 @@ class modelTolerances(tk.Frame):
         if selected_item == 'Speed Up - Filter Reactions':
             self.toleranceMovetoCore_entry.insert(0, '0.1')
             self.toleranceInterruptSimulation_entry.insert(0, '0.1')
+            self.filter_reactions.set(self.filter_reactions_list[0])
+            self.filterThreshold_entry.insert(0, '500000000')
         elif selected_item == 'Speed Up - Pruning':
             self.toleranceMovetoCore_entry.insert(0, '0.5')
             self.toleranceInterruptSimulation_entry.insert(0, '100000000')
@@ -215,3 +241,46 @@ class modelTolerances(tk.Frame):
             self.toleranceMoveEdgeReactionToCore_entry.insert(0, '30')
             self.toleranceMoveEdgeReactionToCoreInterrupt_entry.insert(0, '5.0')
             self.toleranceMoveEdgeReactionToSurface_entry.insert(0, '10')
+
+    def generate_model_tol(self):
+        
+        if self.use_model_tolerances.get() == 1:
+            # Get all the values from the entry boxes
+            self.toleranceMovetoCore_value = self.toleranceMovetoCore_entry.get() if self.toleranceMovetoCore_entry.get() != '' else None
+            self.toleranceInterruptSimulation_value = self.toleranceInterruptSimulation_entry.get() if self.toleranceInterruptSimulation_entry.get() != '' else None
+            self.toleranceKeepInEdge_value = self.toleranceKeepInEdge_entry.get() if self.toleranceKeepInEdge_entry.get() != '' else None
+            self.maximumEdgeSpecies_value = self.maximumEdgeSpecies_entry.get() if self.maximumEdgeSpecies_entry.get() != '' else None
+            self.minCoreSizeForPrune_value = self.minCoreSizeForPrune_entry.get() if self.minCoreSizeForPrune_entry.get() != '' else None
+            self.maxNumObjsPerIter_value = self.maxNumObjsPerIter_entry.get() if self.maxNumObjsPerIter_entry.get() != '' else None
+            self.terminateAtMaxObjects_value = self.terminateAtMaxObjects.get()
+            self.toleranceMoveEdgeReactionToCore_value = self.toleranceMoveEdgeReactionToCore_entry.get() if self.toleranceMoveEdgeReactionToCore_entry.get() != '' else None
+            self.toleranceMoveEdgeReactionToCoreInterrupt_value = self.toleranceMoveEdgeReactionToCoreInterrupt_entry.get() if self.toleranceMoveEdgeReactionToCoreInterrupt_entry.get() != '' else None
+            self.toleranceMoveSurfaceSpeciesToCore_value = self.toleranceMoveSurfaceSpeciesToCore_entry.get() if self.toleranceMoveSurfaceSpeciesToCore_entry.get() != '' else None
+            self.toleranceMoveSurfaceReactionToCore_value = self.toleranceMoveSurfaceReactionToCore_entry.get() if self.toleranceMoveSurfaceReactionToCore_entry.get() != '' else None
+            self.toleranceMoveEdgeReactionToSurface_value = self.toleranceMoveEdgeReactionToSurface_entry.get() if self.toleranceMoveEdgeReactionToSurface_entry.get() != '' else None
+            self.toleranceThermoKeepSpeciesInEdge_value = self.toleranceThermoKeepSpeciesInEdge_entry.get() if self.toleranceThermoKeepSpeciesInEdge_entry.get() != '' else None
+            self.minSpeciesExistIterationsForPrune_value = self.minSpeciesExistIterationsForPrune_entry.get() if self.minSpeciesExistIterationsForPrune_entry.get() != '' else None
+            self.filterReactions_value = self.filter_reactions.get()
+            self.filterThreshold_value = self.filterThreshold_entry.get() if self.filterThreshold_entry.get() != '' else None
+            #Return  all the values in a dictionary
+            
+            return {'toleranceMoveToCore': self.toleranceMovetoCore_value,
+                    'toleranceInterruptSimulation': self.toleranceInterruptSimulation_value,
+                    'toleranceKeepInEdge': self.toleranceKeepInEdge_value,
+                    'maximumEdgeSpecies': self.maximumEdgeSpecies_value,
+                    'minCoreSizeForPrune': self.minCoreSizeForPrune_value,
+                    'maxNumObjsPerIter': self.maxNumObjsPerIter_value,
+                    'terminateAtMaxObjects': self.terminateAtMaxObjects_value,
+                    'toleranceMoveEdgeReactionToCore': self.toleranceMoveEdgeReactionToCore_value,
+                    'toleranceMoveEdgeReactionToCoreInterrupt': self.toleranceMoveEdgeReactionToCoreInterrupt_value,
+                    'toleranceMoveSurfaceSpeciesToCore': self.toleranceMoveSurfaceSpeciesToCore_value,
+                    'toleranceMoveSurfaceReactionToCore': self.toleranceMoveSurfaceReactionToCore_value,
+                    'toleranceMoveEdgeReactionToSurface': self.toleranceMoveEdgeReactionToSurface_value,
+                    'toleranceThermoKeepSpeciesInEdge': self.toleranceThermoKeepSpeciesInEdge_value,
+                    'minSpeciesExistIterationsForPrune': self.minSpeciesExistIterationsForPrune_value,
+                    'filterReactions': self.filterReactions_value,
+                    'filterThreshold': self.filterThreshold_value}
+            
+        elif self.use_model_tolerances.get() == 0:
+            return None
+            

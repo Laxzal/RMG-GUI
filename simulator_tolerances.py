@@ -50,3 +50,15 @@ class simulatorTolerances(ctk.CTkFrame):
         self.sens_rtol_label.grid(row=1, column=0, padx=5, pady=5, sticky='e')
         self.sens_rtol_entry = tk.Entry(self.frame4, width=10)
         self.sens_rtol_entry.grid(row=1, column=1, padx=5, pady=5, sticky='w')
+
+    def generate_sim_tol(self):
+            if self.use_simulator_tolerances.get() == 1:
+                self.atol = self.atol_entry.get()
+                self.rtol = self.rtol_entry.get()
+                self.sens_atol = self.sens_atol_entry.get()
+                self.sens_rtol = self.sens_rtol_entry.get()
+                
+                # Return a dictionary of the tolerances
+                return {'atol': self.atol, 'rtol': self.rtol, 'sens_atol': self.sens_atol, 'sens_rtol': self.sens_rtol}
+            else:
+                return None

@@ -137,3 +137,37 @@ class miscellaneousOptions(ctk.CTkFrame):
         self.save_seed_modules_entry = ttk.Entry(self.frame12)
         self.save_seed_modules_entry.grid(row=0, column=1, padx=5, pady=5)
         self.save_seed_modules_entry.insert(0, '-1')
+
+    def generate_options(self):
+        
+        if self.use_miscellaneous_options.get() == 1:
+            # Get all the values from the entry boxes
+            self.name_value = self.name_entry.get() if self.name_entry.get() != '' else None
+            self.generate_seed_each_iteration_menu_value = self.generate_seed_each_iteration.get() if self.generate_seed_each_iteration.get() != '' else None
+            self.save_seed_to_database_menu_value = self.save_seed_to_database.get() if self.save_seed_to_database.get() != '' else None
+            self.units_entry_value = self.units_entry.get() if self.units_entry.get() != '' else None
+            self.generate_output_html_menu_value = self.generate_output_html.get() if self.generate_output_html.get() != '' else None
+            self.generate_plots_menu_value = self.generate_plots.get() if self.generate_plots.get() != '' else None
+            self.save_simulation_profiles_menu_value = self.save_simulation_profiles.get() if self.save_simulation_profiles.get() != '' else None
+            self.verbose_comments_menu_value = self.verbose_comments.get() if self.verbose_comments.get() != '' else None
+            self.save_edge_species_menu_value = self.save_edge_species.get() if self.save_edge_species.get() != '' else None
+            self.keep_irreversible_menu_value = self.keep_irreversible.get() if self.keep_irreversible.get() != '' else None
+            self.trimolecular_product_reversible_menu_value = self.trimolecular_product_reversible.get() if self.trimolecular_product_reversible.get() != '' else None
+            self.save_seed_modules_entry_value = self.save_seed_modules_entry.get() if self.save_seed_modules_entry.get() != '' else None
+            
+            # Return all values in a dictionary
+            return {'name': self.name_value,
+                    'generateSeedEachIteration': self.generate_seed_each_iteration_menu_value,
+                    'saveSeedToDatabase': self.save_seed_to_database_menu_value,
+                    'units': self.units_entry_value,
+                    'generateOutputHTML': self.generate_output_html_menu_value,
+                    'generatePlots': self.generate_plots_menu_value,
+                    'saveSimulationProfiles': self.save_simulation_profiles_menu_value,
+                    'verboseComments': self.verbose_comments_menu_value,
+                    'saveEdgeSpecies': self.save_edge_species_menu_value,
+                    'keepIrreversible': self.keep_irreversible_menu_value,
+                    'trimolecularProductReversible': self.trimolecular_product_reversible_menu_value,
+                    'saveSeedModulus': self.save_seed_modules_entry_value}
+        else:
+            return None
+            

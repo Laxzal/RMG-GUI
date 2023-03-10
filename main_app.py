@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from species_tab import Species
+import sv_ttk
 from generatefile_tab import GenerateFile
 from deprecated_tab import ThermoSources, ReactionSources
 from datasource_tab import DualListBoxes
@@ -24,6 +25,7 @@ class MainApp(tk.Tk):
         self.title("My App")
         
         custom_style = ttk.Style()
+        #sv_ttk.set_theme("dark")
         custom_style.configure("CustomNotebook.TNotebook", tabposition="wn", tabmargins=[10, 10, 10, 0])
         custom_style.configure("CustomNotebook.TNotebook.Tab", padding=[5, 5], font=("Arial", 14), foreground="#555", background="#ccc")
 
@@ -73,7 +75,7 @@ class MainApp(tk.Tk):
         self.datasource_tab_label.pack(fill='both', expand=True)
         self.species_tab_label = Species(self.species_tab)
         self.reactors_tab_label = simpleReactor(self.reactors_tab, self.species_tab_label)
-        self.liqduid_reactor_tab_label = liquidReactor(self.liquid_reactor_tab, self.species_tab_label)
+        self.liquid_reactor_tab_label = liquidReactor(self.liquid_reactor_tab, self.species_tab_label)
         self.simulator_tolerances_tab_label = simulatorTolerances(self.simulator_tolerances_tab)
         self.model_tolerances_tab_label = modelTolerances(self.model_tolerance_tab)
         self.quantummechanics_tab_label = quantumMechanics(self.quantummechanics_tab)
@@ -88,7 +90,12 @@ class MainApp(tk.Tk):
         self.generate_file_tab_label = GenerateFile(self.generate_file_tab,
                                                     datasource_tab= self.datasource_tab_label,
                                                     species_tab= self.species_tab_label,
-                                                    reactors_tab= self.reactors_tab_label)
+                                                    reactors_tab= self.reactors_tab_label,
+                                                    liquid_tab = self.liquid_reactor_tab_label,
+                                                    simulatortol_tab = self.simulator_tolerances_tab_label,
+                                                    model_tab= self.model_tolerances_tab_label,
+                                                    options_tab= self.miscellaneous_tab_label,
+                                                    pdep_tab= self.pressure_tab_label)
 
 
 if __name__ == "__main__":
