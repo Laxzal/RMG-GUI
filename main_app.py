@@ -16,6 +16,7 @@ from uncertainty_analysis import uncertaintyAnalysis
 from miscellaneous_opts import miscellaneousOptions
 from generateSpeciesConstraint import generateSpeciesConstraint
 from RestartFromSeed import restartFromSeedMechanism
+import webbrowser
 
 class MainApp(tk.Tk):
     def __init__(self):
@@ -32,6 +33,21 @@ class MainApp(tk.Tk):
         # Create a notebook widget
         self.notebook = ttk.Notebook(self, style="CustomNotebook.TNotebook")
         self.notebook.pack(fill="both", expand=True)
+        
+        menu = tk.Menu(self)
+        self.config(menu=menu)
+        
+        
+        file_menu = tk.Menu(menu)
+        menu.add_cascade(label="File", menu=file_menu)
+        file_menu.add_command(label="Exit", command=self.exitProgram)
+        
+        edit_menu = tk.Menu(menu)
+        menu.add_cascade(label="Edit", menu=edit_menu)
+        
+        help_menu = tk.Menu(menu)
+        menu.add_cascade(label="Help", menu=help_menu)
+        help_menu.add_command(label="About", command=self.about)
 
         self.datasources_tab = ttk.Frame(self.notebook)
         self.deprecated_tab = ttk.Frame(self.notebook)
@@ -50,7 +66,7 @@ class MainApp(tk.Tk):
         self.generate_file_tab = ttk.Frame(self.notebook)
 
         self.notebook.add(self.datasources_tab, text="Data Sources")
-        self.notebook.add(self.deprecated_tab, text="Deprecated")
+        #self.notebook.add(self.deprecated_tab, text="Deprecated")
         self.notebook.add(self.species_tab, text='Species Generator')
         self.notebook.add(self.reactors_tab, text='simpleReactor Generator')
         self.notebook.add(self.liquid_reactor_tab, text='liquidReactor Generator')
@@ -65,10 +81,10 @@ class MainApp(tk.Tk):
         self.notebook.add(self.restart_from_seed_tab, text='Restart From Seed Mechanism')
         self.notebook.add(self.generate_file_tab, text="Generate Input File")
 
-        self.thermo_sources = ThermoSources(self.deprecated_tab)
-        self.thermo_sources.grid(row=0, column=0)
-        self.reaction_sources = ReactionSources(self.deprecated_tab)
-        self.reaction_sources.grid(row=0, column=15)
+        #self.thermo_sources = ThermoSources(self.deprecated_tab)
+        #self.thermo_sources.grid(row=0, column=0)
+        #self.reaction_sources = ReactionSources(self.deprecated_tab)
+        #self.reaction_sources.grid(row=0, column=15)
         
         
         self.datasource_tab_label = DualListBoxes(self.datasources_tab)
@@ -101,7 +117,35 @@ class MainApp(tk.Tk):
                                                     mlEstimator_tab= self.mlEstimator_tab_label,
                                                     uncertainty_tab= self.uncertainty_tab_label,
                                                     restart_from_seed_tab= self.restart_from_seed_tab_label)
+    def exitProgram(self):
+        exit()
+        
+    
+    def about(self):
+        self.about_window = tk.Toplevel(self)
+        self.about_window.title("About")
+        self.about_window.geometry("400x400")
+        self.about_window.resizable(False, False)
+        self.about_window.grab_set()
+        self.about_window.focus_set()
+        self.about_window.transient(self)
+        self.about_window.protocol("WM_DELETE_WINDOW", self.about_window.destroy)
+        self.about_window.bind("<Escape>", lambda e: self.about_window.destroy())
+        self.about_window.bind("<Return>", lambda e: self.about_window.destroy())
 
+        #Center labels
+        self.about_label = ttk.Label(self.about_window, text="RMG-Py Input File Generator")
+        self.about_label.place(relx=0.5, rely=0.5, anchor='center')
+        self.about_label = ttk.Label(self.about_window, text="Version 1.0")
+        self.about_label.place(relx=0.5, rely=0.6, anchor='center')
+        self.about_label = ttk.Label(self.about_window, text="Developed by: Calvin Pieters")
+        self.about_label.place(relx=0.5, rely=0.7, anchor='center')
+        self.about_label_link = ttk.Label(self.about_window, text="https://github.com/Laxzal/RMG-GUI", foreground="blue", cursor="hand2")
+        self.about_label_link.place(relx=0.5, rely=0.8, anchor='center')
+        self.about_label_link.bind("<Button-1>", lambda e: self.callback("https://github.com/Laxzal/RMG-GUI"))
+        
+    def callback(self,url):
+        webbrowser.open_new(url)
 
 if __name__ == "__main__":
     app = MainApp()

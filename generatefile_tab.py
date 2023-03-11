@@ -628,7 +628,7 @@ class GenerateFile(ctk.CTkFrame):
             if file_content_restart:
                 f.write(file_content_restart)
                 f.write("""\n\n""")
-            f.write(file_content_email)
+            #f.write(file_content_email)
         # show success message
         success_label = tk.Label(self.frame0, text='File saved successfully!', fg='green')
         success_label.grid(row=2, column=0, columnspan=2, pady=10)

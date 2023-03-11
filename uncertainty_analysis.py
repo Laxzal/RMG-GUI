@@ -37,7 +37,7 @@ class uncertaintyAnalysis(ctk.CTkFrame):
 
         # Create a tick box in gui to use uncertainty analysis
         self.use_uncertainty_analysis = tk.BooleanVar()
-        self.use_uncertainty_analysis.set('')
+        self.use_uncertainty_analysis.set(0)
         self.use_uncertainty_analysis_check = tk.Checkbutton(self.frame0, text="Use Uncertainty Analysis", variable=self.use_uncertainty_analysis)
         self.use_uncertainty_analysis_check.grid(row=0, column=0, padx=5, pady=5)
 
