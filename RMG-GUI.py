@@ -1,21 +1,18 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import messagebox
-from species_tab import Species
-import sv_ttk
-from generatefile_tab import GenerateFile
-from deprecated_tab import ThermoSources, ReactionSources
-from datasource_tab import DualListBoxes
-from reactor_system import simpleReactor, liquidReactor
-from simulator_tolerances import simulatorTolerances
-from model_tolerances import modelTolerances
-from quantummechanics_tab import quantumMechanics
-from mlEstimator import mlEstimator
-from pressureDependence import pressureDependence
-from uncertainty_analysis import uncertaintyAnalysis
-from miscellaneous_opts import miscellaneousOptions
-from generateSpeciesConstraint import generateSpeciesConstraint
-from RestartFromSeed import restartFromSeedMechanism
+from src.species_tab import Species
+from src.generatefile_tab import GenerateFile
+from src.datasource_tab import DualListBoxes
+from src.reactor_system import simpleReactor, liquidReactor
+from src.simulator_tolerances import simulatorTolerances
+from src.model_tolerances import modelTolerances
+from src.quantummechanics_tab import quantumMechanics
+from src.mlEstimator import mlEstimator
+from src.pressureDependence import pressureDependence
+from src.uncertainty_analysis import uncertaintyAnalysis
+from src.miscellaneous_opts import miscellaneousOptions
+from src.generateSpeciesConstraint import generateSpeciesConstraint
+from src.RestartFromSeed import restartFromSeedMechanism
 import webbrowser
 
 class MainApp(tk.Tk):

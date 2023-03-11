@@ -6,7 +6,7 @@ This is a work in progress and will be updated sporadically.
 
 ### Windows
 
-The output folder contains the Windows executable (along with the necessary DLLs) for the RMG-GUI. To run the executable, simply double click on the file. The GUI will open in a new window.
+The output folder contains the Windows executable (along with the necessary DLLs) for the RMG-GUI. To run the executable, simply double click on the file (RMG-GUI.exe). The GUI will open in a new window.
 
 ### Building from source
 
@@ -14,7 +14,7 @@ The output folder contains the Windows executable (along with the necessary DLLs
 2. Open a terminal and navigate to the RMG-GUI folder
 3. Run the command to install the conda environment: `conda env create -f rmg_gui_env.yml`
 4. Activate the conda environment: `conda activate rmg_env`
-5. Open the main_app.py file in the RMG-GUI folder
+5. Open the RMG-GUI.py file in the RMG-GUI folder
 6. Run the file
 
 ## Issues
