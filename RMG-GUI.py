@@ -15,6 +15,9 @@ from src.generateSpeciesConstraint import generateSpeciesConstraint
 from src.RestartFromSeed import restartFromSeedMechanism
 import webbrowser
 
+# New imports
+from src.datasource_tab_v2 import thermoDatabase
+
 class MainApp(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -63,7 +66,7 @@ class MainApp(tk.Tk):
         self.generate_file_tab = ttk.Frame(self.notebook)
 
         self.notebook.add(self.datasources_tab, text="Data Sources")
-        #self.notebook.add(self.deprecated_tab, text="Deprecated")
+        self.notebook.add(self.deprecated_tab, text="Deprecated")
         self.notebook.add(self.species_tab, text='Species Generator')
         self.notebook.add(self.reactors_tab, text='simpleReactor Generator')
         self.notebook.add(self.liquid_reactor_tab, text='liquidReactor Generator')
@@ -78,6 +81,8 @@ class MainApp(tk.Tk):
         self.notebook.add(self.restart_from_seed_tab, text='Restart From Seed Mechanism')
         self.notebook.add(self.generate_file_tab, text="Generate Input File")
 
+        self.deprecated_tab_label = thermoDatabase(self.deprecated_tab)
+        self.deprecated_tab_label.grid(row=0, column=0)
         #self.thermo_sources = ThermoSources(self.deprecated_tab)
         #self.thermo_sources.grid(row=0, column=0)
         #self.reaction_sources = ReactionSources(self.deprecated_tab)
