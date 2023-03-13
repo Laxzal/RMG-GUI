@@ -1,16 +1,13 @@
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
-
-
 class thermoDatabase(ctk.CTkFrame):
     
     def __init__(self, master, **kwargs):
         super().__init__(master)
-        self.master = master
         
         # Create a frame for the thermo database
-        self.frame0 = ctk.CTkFrame(self.master)
+        self.frame0 = ctk.CTkFrame(self)
         self.frame0.grid(row=0, column=0, sticky='nsew')
         
         
@@ -95,3 +92,5 @@ class thermoDatabase(ctk.CTkFrame):
     def add_thermo_database(self, thermo_database):
         #self.unselected_items.append(thermo_database)
         self.right_listbox.insert("end", thermo_database)        
+        
+

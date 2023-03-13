@@ -16,9 +16,11 @@ from src.RestartFromSeed import restartFromSeedMechanism
 import webbrowser
 
 # New imports
+import customtkinter
 from src.datasource_tab_v2 import thermoDatabase
+from src.datasource_kinetic import kineticDatabase
 
-class MainApp(tk.Tk):
+class MainApp(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.geometry("1600x600")
@@ -83,8 +85,8 @@ class MainApp(tk.Tk):
 
         self.deprecated_tab_label = thermoDatabase(self.deprecated_tab)
         self.deprecated_tab_label.grid(row=0, column=0)
-        #self.thermo_sources = ThermoSources(self.deprecated_tab)
-        #self.thermo_sources.grid(row=0, column=0)
+        self.kinetic_sources = kineticDatabase(self.deprecated_tab)
+        self.kinetic_sources.grid(row=1, column=0)
         #self.reaction_sources = ReactionSources(self.deprecated_tab)
         #self.reaction_sources.grid(row=0, column=15)
         
